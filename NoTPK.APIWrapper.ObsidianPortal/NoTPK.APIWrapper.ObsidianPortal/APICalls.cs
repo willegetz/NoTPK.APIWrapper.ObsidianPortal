@@ -5,7 +5,8 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
+using NoTPK.APIWrapper.ObsidianPortal.Helpers;
+using NoTPK.APIWrapper.ObsidianPortal.ObsidianPortalObjects;
 
 namespace NoTPK.APIWrapper.ObsidianPortal
 {
@@ -13,17 +14,18 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 	{
 		private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		public static async Task<object> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret)
+		public static async Task<ObsidianPortalUserInfo> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret)
 		{
 			const string showMeUrl = @"http://api.obsidianportal.com/v1/users/me.json";
 
-			var authorizationHeader = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
-			var responseText = await RetrieveDataFromGet(showMeUrl, authorizationHeader);
-			var serializer = new JavaScriptSerializer();
-			var result = serializer.Deserialize<object>(responseText);
-			return result;
+			var requestMessage = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
+			var responseText = await RetrieveDataFromGet(showMeUrl, requestMessage);
+			
+			var parsedResponse = HelperMethods.ParseJson(responseText);
+			return new ObsidianPortalUserInfo(parsedResponse);
 		}
-		public static string GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod)
+
+		public static HttpRequestMessage GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod)
 		{
 			string nonce = Guid.NewGuid().ToString("N");
 
@@ -64,14 +66,16 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 					"{0}=\"{1}\", ", authorizationPart.Key, Uri.EscapeDataString(authorizationPart.Value));
 			}
 			authorizationHeaderBuilder.Length = authorizationHeaderBuilder.Length - 2;
-			return authorizationHeaderBuilder.ToString();
-		}
-
-		public static async Task<string> RetrieveDataFromGet(string location, string authorizationHeader)
-		{
-			var _httpClient = new HttpClient();
+			var authorizationHeader = authorizationHeaderBuilder.ToString();
+			
 			var request = new HttpRequestMessage(HttpMethod.Get, location);
 			request.Headers.Add("Authorization", authorizationHeader);
+			return request;
+		}
+
+		public static async Task<string> RetrieveDataFromGet(string location, HttpRequestMessage request)
+		{
+			var _httpClient = new HttpClient();
 
 			HttpResponseMessage response = await _httpClient.SendAsync(request);
 
