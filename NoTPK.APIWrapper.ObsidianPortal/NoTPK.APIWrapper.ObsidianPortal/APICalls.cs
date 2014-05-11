@@ -12,6 +12,12 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 	{
 		private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
+		public static async Task<string> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret, string location)
+		{
+			var authorizationHeader = ApiCalls.GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, location, HttpMethod.Get);
+			var responseText = await ApiCalls.RetrieveDataFromGet(location, authorizationHeader);
+			return responseText;
+		}
 		public static string GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod)
 		{
 			string nonce = Guid.NewGuid().ToString("N");
