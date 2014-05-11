@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using System.Web.Script.Serialization;
 
 namespace NoTPK.APIWrapper.ObsidianPortal
 {
@@ -13,13 +13,15 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 	{
 		private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		public static async Task<dynamic> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret)
+		public static async Task<object> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret)
 		{
 			const string showMeUrl = @"http://api.obsidianportal.com/v1/users/me.json";
+
 			var authorizationHeader = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
 			var responseText = await RetrieveDataFromGet(showMeUrl, authorizationHeader);
-			dynamic userInfoObj = JObject.Parse(responseText);
-			return userInfoObj;
+			var serializer = new JavaScriptSerializer();
+			var result = serializer.Deserialize<object>(responseText);
+			return result;
 		}
 		public static string GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod)
 		{
