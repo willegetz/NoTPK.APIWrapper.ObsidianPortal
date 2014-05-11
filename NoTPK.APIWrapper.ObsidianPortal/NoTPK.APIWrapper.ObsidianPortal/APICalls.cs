@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NoTPK.APIWrapper.ObsidianPortal
 {
@@ -55,6 +56,22 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return authorizationHeaderBuilder.ToString();
 		}
 
+		public static async Task<string> RetrieveDataFromGet(string location, string authorizationHeader)
+		{
+			var _httpClient = new HttpClient();
+			var request = new HttpRequestMessage(HttpMethod.Get, location);
+			request.Headers.Add("Authorization", authorizationHeader);
+
+			HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				response.EnsureSuccessStatusCode();
+			}
+
+			string responseText = await response.Content.ReadAsStringAsync();
+			return responseText;
+		}
 		private static string ComputeSignature(string appSecret, string tokenSecret, string signatureData)
 		{
 			using (var algorithm = new HMACSHA1())
