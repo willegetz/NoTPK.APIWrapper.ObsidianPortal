@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace NoTPK.APIWrapper.ObsidianPortal
 {
@@ -12,11 +13,13 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 	{
 		private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		public static async Task<string> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret, string location)
+		public static async Task<dynamic> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret)
 		{
-			var authorizationHeader = ApiCalls.GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, location, HttpMethod.Get);
-			var responseText = await ApiCalls.RetrieveDataFromGet(location, authorizationHeader);
-			return responseText;
+			const string showMeUrl = @"http://api.obsidianportal.com/v1/users/me.json";
+			var authorizationHeader = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
+			var responseText = await RetrieveDataFromGet(showMeUrl, authorizationHeader);
+			dynamic userInfoObj = JObject.Parse(responseText);
+			return userInfoObj;
 		}
 		public static string GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod)
 		{
@@ -78,6 +81,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			string responseText = await response.Content.ReadAsStringAsync();
 			return responseText;
 		}
+	
 		private static string ComputeSignature(string appSecret, string tokenSecret, string signatureData)
 		{
 			using (var algorithm = new HMACSHA1())
