@@ -20,12 +20,12 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 
 			var requestMessage = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
 			var responseText = await RetrieveDataFromGet(showMeUrl, requestMessage);
-			
+
 			var parsedResponse = HelperMethods.ParseJson(responseText);
 			return new ObsidianPortalUserInfo(parsedResponse);
 		}
 
-		public static async Task<ObsidianPortalUserInfo> ShowWithUserId(string appId, string appSecret, string token, string tokenSecret, string userId)
+		public static async Task<ObsidianPortalUserInfo> ShowByUserId(string appId, string appSecret, string token, string tokenSecret, string userId)
 		{
 			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userId);
 
@@ -37,19 +37,41 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 
 		}
 
-		public static HttpRequestMessage GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod)
+		public static async Task<ObsidianPortalUserInfo> ShoByUserName(string appId, string appSecret, string token, string tokenSecret, string userName)
+		{
+			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userName);
+
+			var optionalParams = new Dictionary<string, string>();
+			optionalParams.Add("use_username", "true");
+			var requestMessage = GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get, "?use_username=true", optionalParams);
+			var responseText = await RetrieveDataFromGet(showUrl, requestMessage);
+
+			var parsedResponse = HelperMethods.ParseJson(responseText);
+			return new ObsidianPortalUserInfo(parsedResponse);
+		}
+
+		public static HttpRequestMessage GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
 		{
 			string nonce = Guid.NewGuid().ToString("N");
 
-			var authorizationParts = new SortedDictionary<string, string>
+			var authorizationParts = new SortedDictionary<string, string>()
 			{
-				{ "oauth_consumer_key", appId },
-				{ "oauth_nonce", nonce },
-				{ "oauth_signature_method", "HMAC-SHA1" },
-				{ "oauth_token", accessToken },
-				{ "oauth_timestamp", GenerateTimeStamp() },
-				{ "oauth_version", "1.0" },
+				{"oauth_consumer_key", appId},
+				{"oauth_nonce", nonce},
+				{"oauth_signature_method", "HMAC-SHA1"},
+				{"oauth_token", accessToken},
+				{"oauth_timestamp", GenerateTimeStamp()},
+				{"oauth_version", "1.0"},
+
 			};
+
+			if (optionalParams != null)
+			{
+				foreach (var param in optionalParams)
+				{
+					authorizationParts.Add(param.Key, param.Value);
+				}
+			}
 
 			var parameterBuilder = new StringBuilder();
 			foreach (var authorizationKey in authorizationParts)
@@ -70,6 +92,15 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			authorizationParts.Add("oauth_signature", signature);
 			authorizationParts.Remove("oauth_verifier");
 
+			if (optionalParams != null)
+			{
+				foreach (var optionalParam in optionalParams)
+				{
+					authorizationParts.Remove(optionalParam.Key);
+				}
+				location = location + queryParams;
+			}
+
 			var authorizationHeaderBuilder = new StringBuilder();
 			authorizationHeaderBuilder.Append("OAuth ");
 			foreach (var authorizationPart in authorizationParts)
@@ -79,7 +110,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			}
 			authorizationHeaderBuilder.Length = authorizationHeaderBuilder.Length - 2;
 			var authorizationHeader = authorizationHeaderBuilder.ToString();
-			
+
 			var request = new HttpRequestMessage(HttpMethod.Get, location);
 			request.Headers.Add("Authorization", authorizationHeader);
 			return request;
