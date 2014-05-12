@@ -19,7 +19,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			const string showMeUrl = @"http://api.obsidianportal.com/v1/users/me.json";
 
 			var requestMessage = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
-			var responseText = await RetrieveDataFromGet(showMeUrl, requestMessage);
+			var responseText = await RetrieveDataFromGet(requestMessage);
 
 			var parsedResponse = HelperMethods.ParseJson(responseText);
 			return new ObsidianPortalUserInfo(parsedResponse);
@@ -30,24 +30,36 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userId);
 
 			var requestMessage = GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
-			var responseText = await RetrieveDataFromGet(showUrl, requestMessage);
+			var responseText = await RetrieveDataFromGet(requestMessage);
 
 			var parsedResponse = HelperMethods.ParseJson(responseText);
 			return new ObsidianPortalUserInfo(parsedResponse);
 
 		}
 
-		public static async Task<ObsidianPortalUserInfo> ShoByUserName(string appId, string appSecret, string token, string tokenSecret, string userName)
+		public static async Task<ObsidianPortalUserInfo> ShowByUserName(string appId, string appSecret, string token, string tokenSecret, string userName)
 		{
 			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userName);
 
 			var optionalParams = new Dictionary<string, string>();
 			optionalParams.Add("use_username", "true");
 			var requestMessage = GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get, "?use_username=true", optionalParams);
-			var responseText = await RetrieveDataFromGet(showUrl, requestMessage);
+			var responseText = await RetrieveDataFromGet(requestMessage);
 
 			var parsedResponse = HelperMethods.ParseJson(responseText);
 			return new ObsidianPortalUserInfo(parsedResponse);
+		}
+
+		public static async Task<Dictionary<string, object>> ShowByCampaignId(string appId, string appSecret, string token, string tokenSecret, string campaignId)
+		{
+			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}.json", campaignId);
+
+			var requestMessage = GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
+			var responseText = await RetrieveDataFromGet(requestMessage);
+
+			var parsedResponse = HelperMethods.ParseJson(responseText);
+			return parsedResponse;
+
 		}
 
 		public static HttpRequestMessage GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
@@ -116,7 +128,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return request;
 		}
 
-		public static async Task<string> RetrieveDataFromGet(string location, HttpRequestMessage request)
+		public static async Task<string> RetrieveDataFromGet(HttpRequestMessage request)
 		{
 			var _httpClient = new HttpClient();
 
