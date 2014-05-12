@@ -14,7 +14,14 @@ namespace NoTPK.APIWrapper.ObsidianPortal.ObsidianPortalObjects
 			CampaignUrl = campaign.Where(ui => ui.Key == "campaign_url").Select(ui => HelperMethods.ValidateEntry(ui.Value)).FirstOrDefault();
 			BannerImageUrl = campaign.Where(ui => ui.Key == "banner_image_url").Select(ui => HelperMethods.ValidateEntry(ui.Value)).FirstOrDefault();
 			Visibility = campaign.Where(ui => ui.Key == "visibility").Select(ui => HelperMethods.ValidateEntry(ui.Value)).FirstOrDefault();
-			UserRole = campaign.Where(ui => ui.Key == "role").Select(ui => HelperMethods.ValidateEntry(ui.Value)).FirstOrDefault();
+			var roleRaw = campaign.Where(ui => ui.Key == "role").Select(ui => HelperMethods.ValidateEntry(ui.Value)).FirstOrDefault();
+			if (roleRaw == "game_master")
+			{
+				UserRole = "Game Master";
+			}else if (roleRaw == "player")
+			{
+				UserRole = "Player";
+			}
 		}
 
 		public string CampaignId { get; set; }

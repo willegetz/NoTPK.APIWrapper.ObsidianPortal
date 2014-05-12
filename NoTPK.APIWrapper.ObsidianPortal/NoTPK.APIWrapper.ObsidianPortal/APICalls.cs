@@ -25,6 +25,18 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return new ObsidianPortalUserInfo(parsedResponse);
 		}
 
+		public static async Task<ObsidianPortalUserInfo> ShowWithUserId(string appId, string appSecret, string token, string tokenSecret, string userId)
+		{
+			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userId);
+
+			var requestMessage = GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
+			var responseText = await RetrieveDataFromGet(showUrl, requestMessage);
+
+			var parsedResponse = HelperMethods.ParseJson(responseText);
+			return new ObsidianPortalUserInfo(parsedResponse);
+
+		}
+
 		public static HttpRequestMessage GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod)
 		{
 			string nonce = Guid.NewGuid().ToString("N");
@@ -87,7 +99,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			string responseText = await response.Content.ReadAsStringAsync();
 			return responseText;
 		}
-	
+
 		private static string ComputeSignature(string appSecret, string tokenSecret, string signatureData)
 		{
 			using (var algorithm = new HMACSHA1())
@@ -106,6 +118,5 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			TimeSpan secondsSinceUnixEpocStart = DateTime.UtcNow - Epoch;
 			return Convert.ToInt64(secondsSinceUnixEpocStart.TotalSeconds).ToString(CultureInfo.InvariantCulture);
 		}
-
 	}
 }
