@@ -46,6 +46,16 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return await RetrieveDataFromGet(requestMessage);
 		}
 
+		public static async Task<string> ShowByCampaignSlug(string appId, string appSecret, string accessToken, string accessTokenSecret, string slug)
+		{
+			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}.json", slug);
+			
+			var optionalParams = new Dictionary<string, string>();
+			optionalParams.Add("use_slug", "true");
+			var requestMessage = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showUrl, HttpMethod.Get,"?use_slug=true", optionalParams);
+			return await RetrieveDataFromGet(requestMessage);
+		}
+
 		public static HttpRequestMessage GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
 		{
 			string nonce = Guid.NewGuid().ToString("N");
