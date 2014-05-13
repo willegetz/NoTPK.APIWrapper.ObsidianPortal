@@ -14,15 +14,12 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 	{
 		private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		public static async Task<ObsidianPortalUserInfo> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret)
+		public static async Task<string> ShowMe(string appId, string appSecret, string accessToken, string accessTokenSecret)
 		{
 			const string showMeUrl = @"http://api.obsidianportal.com/v1/users/me.json";
 
 			var requestMessage = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
-			var responseText = await RetrieveDataFromGet(requestMessage);
-
-			var parsedResponse = HelperMethods.ParseJson(responseText);
-			return new ObsidianPortalUserInfo(parsedResponse);
+			return await RetrieveDataFromGet(requestMessage);
 		}
 
 		public static async Task<ObsidianPortalUserInfo> ShowByUserId(string appId, string appSecret, string token, string tokenSecret, string userId)
