@@ -5,8 +5,6 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using NoTPK.APIWrapper.ObsidianPortal.Helpers;
-using NoTPK.APIWrapper.ObsidianPortal.ObsidianPortalObjects;
 
 namespace NoTPK.APIWrapper.ObsidianPortal
 {
@@ -22,41 +20,30 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return await RetrieveDataFromGet(requestMessage);
 		}
 
-		public static async Task<ObsidianPortalUserInfo> ShowByUserId(string appId, string appSecret, string token, string tokenSecret, string userId)
+		public static async Task<string> ShowByUserId(string appId, string appSecret, string token, string tokenSecret, string userId)
 		{
 			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userId);
 
 			var requestMessage = GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
-			var responseText = await RetrieveDataFromGet(requestMessage);
-
-			var parsedResponse = HelperMethods.ParseJson(responseText);
-			return new ObsidianPortalUserInfo(parsedResponse);
-
+			return await RetrieveDataFromGet(requestMessage);
 		}
 
-		public static async Task<ObsidianPortalUserInfo> ShowByUserName(string appId, string appSecret, string token, string tokenSecret, string userName)
+		public static async Task<string> ShowByUserName(string appId, string appSecret, string token, string tokenSecret, string userName)
 		{
 			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userName);
 
 			var optionalParams = new Dictionary<string, string>();
 			optionalParams.Add("use_username", "true");
 			var requestMessage = GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get, "?use_username=true", optionalParams);
-			var responseText = await RetrieveDataFromGet(requestMessage);
-
-			var parsedResponse = HelperMethods.ParseJson(responseText);
-			return new ObsidianPortalUserInfo(parsedResponse);
+			return await RetrieveDataFromGet(requestMessage);
 		}
 
-		public static async Task<Dictionary<string, object>> ShowByCampaignId(string appId, string appSecret, string token, string tokenSecret, string campaignId)
+		public static async Task<string> ShowByCampaignId(string appId, string appSecret, string token, string tokenSecret, string campaignId)
 		{
 			string showUrl = string.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}.json", campaignId);
 
 			var requestMessage = GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
-			var responseText = await RetrieveDataFromGet(requestMessage);
-
-			var parsedResponse = HelperMethods.ParseJson(responseText);
-			return parsedResponse;
-
+			return await RetrieveDataFromGet(requestMessage);
 		}
 
 		public static HttpRequestMessage GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
