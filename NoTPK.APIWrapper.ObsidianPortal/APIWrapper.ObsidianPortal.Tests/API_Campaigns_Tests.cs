@@ -8,7 +8,7 @@ using NoTPK.APIWrapper.ObsidianPortal;
 namespace APIWrapper.ObsidianPortal.Tests
 {
 	[TestClass]
-	public class API_Users_Tests
+	public class API_Campaigns_Tests
 	{
 		private static string _appId = "";
 		private static string _appSecret = "";
@@ -27,7 +27,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 
 			if (tokens != null)
 			{
-				_appId = (string) tokens.Element("AppId");
+				_appId = (string)tokens.Element("AppId");
 				_appSecret = (string)tokens.Element("AppSecret");
 				_token = (string)tokens.Element("AccessToken");
 				_tokenSecret = (string)tokens.Element("AccessTokenSecret");
@@ -35,36 +35,28 @@ namespace APIWrapper.ObsidianPortal.Tests
 
 			var approvedPath = Path.GetFullPath(@"..\..\..\..\..\..\Configs\NoTPK.APIWrapper.ObsidianPortal.Tests.Approved.xml");
 			var approvedDOc = XDocument.Load(approvedPath);
-			
-			_approvedResults = (from a in approvedDOc.Descendants("ApprovedValues").Descendants("Users") select a).FirstOrDefault();
+
+			_approvedResults = (from a in approvedDOc.Descendants("ApprovedValues").Descendants("Campaigns") select a).FirstOrDefault();
 			_testVariables = (from v in configDoc.Descendants("TestVariables") select v).FirstOrDefault();
 		}
 
 		[TestMethod]
-		public async Task Test_Users_Show__LoggedInUser()
+		public async Task Test_Campaigns_Show__ById()
 		{
-			var approved = (string) _approvedResults.Element("Show_LoggedInUser");
-			var result = await ApiCalls.ShowMe(_appId, _appSecret, _token, _tokenSecret);
+			var approved = (string)_approvedResults.Element("Show_CampaignById");
+			var campaignId = (string)_testVariables.Element("CampaignId");
+
+			var result = await ApiCalls.ShowByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId);
 			Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
-		public async Task Test_Users_Show__ById()
+		public async Task Test_Campaigns_Show__BySlug()
 		{
-			var approved = (string) _approvedResults.Element("Show_UserById");
-			var userId = (string) _testVariables.Element("UserId");
+			var approved = (string)_approvedResults.Element("Show_CampaignBySlug");
+			var campaignSlug = (string)_testVariables.Element("CampaignSlug");
 
-			var result = await ApiCalls.ShowByUserId(_appId, _appSecret, _token, _tokenSecret, userId);
-			Assert.AreEqual(approved, result);
-		}
-
-		[TestMethod]
-		public async Task Test_Users_Show__ByName()
-		{
-			var approved = (string) _approvedResults.Element("Show_UserName");
-			var userName = (string) _testVariables.Element("UserName");
-
-			var result = await ApiCalls.ShowByUserName(_appId, _appSecret, _token, _tokenSecret, userName);
+			var result = await ApiCalls.ShowByCampaignSlug(_appId, _appSecret, _token, _tokenSecret, campaignSlug);
 			Assert.AreEqual(approved, result);
 		}
 	}
