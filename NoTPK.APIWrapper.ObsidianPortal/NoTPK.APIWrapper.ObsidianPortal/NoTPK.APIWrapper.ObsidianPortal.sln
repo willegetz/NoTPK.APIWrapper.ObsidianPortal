@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoTPK.APIWrapper.ObsidianPortal", "NoTPK.APIWrapper.ObsidianPortal.csproj", "{873EE1FA-D6B8-4E5F-981C-018AD9ECB1F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIWrapper.ObsidianPortal.Tests", "..\APIWrapper.ObsidianPortal.Tests\APIWrapper.ObsidianPortal.Tests.csproj", "{0477CE0E-419D-4C23-8BE9-82612FF5A047}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{873EE1FA-D6B8-4E5F-981C-018AD9ECB1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{873EE1FA-D6B8-4E5F-981C-018AD9ECB1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{873EE1FA-D6B8-4E5F-981C-018AD9ECB1F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0477CE0E-419D-4C23-8BE9-82612FF5A047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0477CE0E-419D-4C23-8BE9-82612FF5A047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0477CE0E-419D-4C23-8BE9-82612FF5A047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0477CE0E-419D-4C23-8BE9-82612FF5A047}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
