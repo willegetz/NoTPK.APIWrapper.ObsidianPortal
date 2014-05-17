@@ -57,5 +57,15 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await ApiCalls.ShowByUserId(_appId, _appSecret, _token, _tokenSecret, userId);
 			Assert.AreEqual(approved, result);
 		}
+
+		[TestMethod]
+		public async Task Test_Users_Show__ByName()
+		{
+			var approved = (string) _approvedResults.Element("Show_UserName");
+			var userName = (string) _testVariables.Element("UserName");
+
+			var result = await ApiCalls.ShowByUserName(_appId, _appSecret, _token, _tokenSecret, userName);
+			Assert.AreEqual(approved, result);
+		}
 	}
 }
