@@ -55,7 +55,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var approved = (string) _approvedResults.Element("Show_UserById");
 			var userId = (string) _testVariables.Element("UserId");
 
-			var result = await API_Users.ShowByUserId(_appId, _appSecret, _token, _tokenSecret, userId);
+			var result = await API_Users.ShowById(_appId, _appSecret, _token, _tokenSecret, userId);
 			Assert.AreEqual(approved, result);
 		}
 
@@ -65,7 +65,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var approved = (string) _approvedResults.Element("Show_UserName");
 			var userName = (string) _testVariables.Element("UserName");
 
-			var result = await API_Users.ShowByUserName(_appId, _appSecret, _token, _tokenSecret, userName);
+			var result = await API_Users.ShowByName(_appId, _appSecret, _token, _tokenSecret, userName);
 			Assert.AreEqual(approved, result);
 		}
 	}

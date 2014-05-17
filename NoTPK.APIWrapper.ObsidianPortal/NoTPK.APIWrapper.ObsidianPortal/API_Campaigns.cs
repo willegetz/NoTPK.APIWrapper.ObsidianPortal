@@ -8,7 +8,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 {
 	public class API_Campaigns
 	{
-		public static async Task<string> ShowByCampaignId(string appId, string appSecret, string token, string tokenSecret, string campaignId)
+		public static async Task<string> ShowById(string appId, string appSecret, string token, string tokenSecret, string campaignId)
 		{
 			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}.json", campaignId);
 
@@ -16,7 +16,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
 		}
 
-		public static async Task<string> ShowByCampaignSlug(string appId, string appSecret, string accessToken, string accessTokenSecret, string slug)
+		public static async Task<string> ShowBySlug(string appId, string appSecret, string accessToken, string accessTokenSecret, string slug)
 		{
 			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}.json", slug);
 			

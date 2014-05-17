@@ -16,7 +16,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
 		}
 
-		public static async Task<string> ShowByUserId(string appId, string appSecret, string token, string tokenSecret, string userId)
+		public static async Task<string> ShowById(string appId, string appSecret, string token, string tokenSecret, string userId)
 		{
 			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userId);
 
@@ -24,7 +24,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
 		}
 
-		public static async Task<string> ShowByUserName(string appId, string appSecret, string token, string tokenSecret, string userName)
+		public static async Task<string> ShowByName(string appId, string appSecret, string token, string tokenSecret, string userName)
 		{
 			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userName);
 
