@@ -24,7 +24,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
 		}
 
-		public static async Task<string> ShowCharacterByCampaignIdCharacterSlug(string appId, string appSecret, string token, string tokenSecret, string campaignId, string slug)
+		public static async Task<string> ShowBySlug(string appId, string appSecret, string token, string tokenSecret, string campaignId, string slug)
 		{
 			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/characters/{1}.json", campaignId, slug);
 			var optionalParams = new Dictionary<string, string>()

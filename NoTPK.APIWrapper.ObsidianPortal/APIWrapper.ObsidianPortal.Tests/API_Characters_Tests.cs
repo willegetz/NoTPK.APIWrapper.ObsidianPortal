@@ -60,5 +60,16 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
 			Assert.AreEqual(approved, result);
 		}
+
+		[TestMethod]
+		public async Task Test_Characters_Show__ByCharacterSlug()
+		{
+			var approved = (string) _approvedResults.Element("Show_CharacterBySlug");
+			var campaignId = (string) _testVariables.Element("CampaignId");
+			var characterSlug = (string) _testVariables.Element("CharacterSlug");
+
+			var result = await API_Characters.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignId, characterSlug);
+			Assert.AreEqual(approved, result);
+		}
 	}
 }
