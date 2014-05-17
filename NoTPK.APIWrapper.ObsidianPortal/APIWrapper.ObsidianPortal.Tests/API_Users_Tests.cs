@@ -41,6 +41,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
+		[Ignore] // Timestamp is created for "updated_at" value whenever a get request is made.
 		public async Task Test_Users_Show__LoggedInUser()
 		{
 			var approved = (string) _approvedResults.Element("Show_LoggedInUser");
