@@ -16,13 +16,14 @@ namespace APIWrapper.ObsidianPortal.Tests
 		private static string _tokenSecret = "";
 
 		private static XElement _approvedResults;
+		private static XElement _testVariables;
 
 		[AssemblyInitialize]
 		public static void LoadConstants(TestContext testContext)
 		{
 			var configPath = Path.GetFullPath(@"..\..\..\..\..\..\Configs\NoTPK.APIWrapper.ObsidianPortal.Tests.Config.xml");
-			var tokenDoc = XDocument.Load(configPath);
-			var tokens = (from t in tokenDoc.Descendants("TestTokens") select t).FirstOrDefault();
+			var configDoc = XDocument.Load(configPath);
+			var tokens = (from t in configDoc.Descendants("TestTokens") select t).FirstOrDefault();
 
 			if (tokens != null)
 			{
@@ -36,6 +37,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var approvedDOc = XDocument.Load(approvedPath);
 			
 			_approvedResults = (from a in approvedDOc.Descendants("ApprovedValues") select a).FirstOrDefault();
+			_testVariables = (from v in configDoc.Descendants("TestVariables") select v).FirstOrDefault();
 		}
 
 		[TestMethod]
@@ -43,6 +45,16 @@ namespace APIWrapper.ObsidianPortal.Tests
 		{
 			var approved = (string) _approvedResults.Element("Show_LoggedInUser");
 			var result = await ApiCalls.ShowMe(_appId, _appSecret, _token, _tokenSecret);
+			Assert.AreEqual(approved, result);
+		}
+
+		[TestMethod]
+		public async Task Test_Users_Show__ById()
+		{
+			var approved = (string) _approvedResults.Element("Show_UserById");
+			var userId = (string) _testVariables.Element("UserId");
+
+			var result = await ApiCalls.ShowByUserId(_appId, _appSecret, _token, _tokenSecret, userId);
 			Assert.AreEqual(approved, result);
 		}
 	}
