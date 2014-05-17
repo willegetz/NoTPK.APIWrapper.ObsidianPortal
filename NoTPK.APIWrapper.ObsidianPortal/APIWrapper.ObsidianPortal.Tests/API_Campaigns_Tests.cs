@@ -46,7 +46,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var approved = (string)_approvedResults.Element("Show_CampaignById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 
-			var result = await ApiCalls.ShowByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId);
+			var result = await API_Campaigns.ShowByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId);
 			Assert.AreEqual(approved, result);
 		}
 
@@ -56,7 +56,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var approved = (string)_approvedResults.Element("Show_CampaignBySlug");
 			var campaignSlug = (string)_testVariables.Element("CampaignSlug");
 
-			var result = await ApiCalls.ShowByCampaignSlug(_appId, _appSecret, _token, _tokenSecret, campaignSlug);
+			var result = await API_Campaigns.ShowByCampaignSlug(_appId, _appSecret, _token, _tokenSecret, campaignSlug);
 			Assert.AreEqual(approved, result);
 		}
 	}
