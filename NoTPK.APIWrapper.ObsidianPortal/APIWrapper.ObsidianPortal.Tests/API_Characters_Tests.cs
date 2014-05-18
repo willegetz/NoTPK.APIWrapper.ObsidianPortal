@@ -94,5 +94,16 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await API_Characters.Update(_appId, _appSecret, _token, _tokenSecret, campaignId, updateCharacter, updateContent);
 			Assert.AreEqual(approved, result);
 		}
+
+		[TestMethod]
+		public async Task Test_Characters_Delete__ByCharacterId()
+		{
+			var approved = (string) _approvedResults.Element("Show_DeleteCharacter");
+			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
+			var deleteCharacter = (string) _testVariables.Element("DeleteCharacterId");
+
+			var result = await API_Characters.Delete(_appId, _appSecret, _token, _tokenSecret, campaignId, deleteCharacter);
+			Assert.AreEqual(approved, result);
+		}
 	}
 }
