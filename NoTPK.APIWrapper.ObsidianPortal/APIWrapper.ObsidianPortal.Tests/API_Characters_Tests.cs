@@ -53,9 +53,9 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_Characters_Show__ByCharacterId()
 		{
-			var approved = (string) _approvedResults.Element("Show_CharacterById");
-			var campaignId = (string) _testVariables.Element("CampaignId");
-			var characterId = (string) _testVariables.Element("CharacterId");
+			var approved = (string)_approvedResults.Element("Show_CharacterById");
+			var campaignId = (string)_testVariables.Element("CampaignId");
+			var characterId = (string)_testVariables.Element("CharacterId");
 
 			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
 			Assert.AreEqual(approved, result);
@@ -64,11 +64,22 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_Characters_Show__ByCharacterSlug()
 		{
-			var approved = (string) _approvedResults.Element("Show_CharacterBySlug");
-			var campaignId = (string) _testVariables.Element("CampaignId");
-			var characterSlug = (string) _testVariables.Element("CharacterSlug");
+			var approved = (string)_approvedResults.Element("Show_CharacterBySlug");
+			var campaignId = (string)_testVariables.Element("CampaignId");
+			var characterSlug = (string)_testVariables.Element("CharacterSlug");
 
 			var result = await API_Characters.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignId, characterSlug);
+			Assert.AreEqual(approved, result);
+		}
+
+		[TestMethod]
+		public async Task Test_Characters_Create__ByCampaignId()
+		{
+			var approved = (string)_approvedResults.Element("Show_CreateCharacter");
+			var campaignId = (string)_testVariables.Element("ModifiableCampaign");
+			var newCharacter = (string)_testVariables.Element("NewCharacter");
+
+			var result = await API_Characters.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newCharacter);
 			Assert.AreEqual(approved, result);
 		}
 	}

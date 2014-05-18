@@ -46,7 +46,17 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			return responseText;
 		}
 
-		internal static HttpRequestMessage GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
+		internal static HttpRequestMessage BuildRequest(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
+		{
+			var authorizationHeader = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, location, webMethod, optionalParams);
+
+			var fullUri = location + queryParams;
+			var request = new HttpRequestMessage(webMethod, fullUri);
+			request.Headers.Add("Authorization", authorizationHeader);
+			return request;
+		}
+
+		private static string GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, Dictionary<string, string> optionalParams = null)
 		{
 			string nonce = Guid.NewGuid().ToString("N");
 
@@ -58,7 +68,6 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 				{"oauth_token", accessToken},
 				{"oauth_timestamp", GenerateTimeStamp()},
 				{"oauth_version", "1.0"},
-
 			};
 
 			if (optionalParams != null)
@@ -94,7 +103,6 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 				{
 					authorizationParts.Remove(optionalParam.Key);
 				}
-				location = location + queryParams;
 			}
 
 			var authorizationHeaderBuilder = new StringBuilder();
@@ -106,10 +114,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			}
 			authorizationHeaderBuilder.Length = authorizationHeaderBuilder.Length - 2;
 			var authorizationHeader = authorizationHeaderBuilder.ToString();
-
-			var request = new HttpRequestMessage(HttpMethod.Get, location);
-			request.Headers.Add("Authorization", authorizationHeader);
-			return request;
+			return authorizationHeader;
 		}
 	}
 }

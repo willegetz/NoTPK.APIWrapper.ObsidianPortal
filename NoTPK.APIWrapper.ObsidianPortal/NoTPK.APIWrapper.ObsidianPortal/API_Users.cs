@@ -12,7 +12,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 		{
 			const string showMeUrl = @"http://api.obsidianportal.com/v1/users/me.json";
 
-			var requestMessage = RequestHelpers.GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
+			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, accessToken, accessTokenSecret, showMeUrl, HttpMethod.Get);
 			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
 		}
 
@@ -20,7 +20,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 		{
 			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/users/{0}.json", userId);
 
-			var requestMessage = RequestHelpers.GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
+			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
 			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
 		}
 
@@ -30,7 +30,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 
 			var optionalParams = new Dictionary<string, string>();
 			optionalParams.Add("use_username", "true");
-			var requestMessage = RequestHelpers.GetAuthorizationHeader(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get, "?use_username=true", optionalParams);
+			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get, "?use_username=true", optionalParams);
 			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
 		}
 	}
