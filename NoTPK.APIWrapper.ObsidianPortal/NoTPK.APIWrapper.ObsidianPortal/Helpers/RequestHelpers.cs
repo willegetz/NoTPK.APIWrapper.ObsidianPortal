@@ -34,7 +34,6 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 		internal static async Task<string> RetrieveResponseContent(HttpRequestMessage request)
 		{
 			var _httpClient = new HttpClient();
-
 			HttpResponseMessage response = await _httpClient.SendAsync(request);
 
 			if (!response.IsSuccessStatusCode)

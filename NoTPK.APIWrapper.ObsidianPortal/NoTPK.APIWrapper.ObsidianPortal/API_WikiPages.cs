@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NoTPK.APIWrapper.ObsidianPortal.Helpers;
@@ -20,6 +21,16 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			var showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/wikis/{1}.json", campaignId, wikiPageId);
 
 			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
+		}
+
+		public static async Task<string> ShowBySlug(string appId, string appSecret, string token, string tokenSecret, string campaignId, string wikiPageSlug)
+		{
+			var showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/wikis/{1}.json", campaignId, wikiPageSlug);
+			var optionalParams = new Dictionary<string, string>();
+			optionalParams.Add("use_slug", "true");
+
+			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get, "?use_slug=true", optionalParams);
 			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
 	}

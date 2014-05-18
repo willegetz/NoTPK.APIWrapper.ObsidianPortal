@@ -60,5 +60,17 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await API_WikiPages.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, wikiPageId);
 			Assert.AreEqual(approved, result);
 		}
+
+		[TestMethod]
+		[Ignore] // Recieving a 504 Gate-way timeout.
+		public async Task Test_WikiPages_Show__BySlug()
+		{
+			var approved = (string) _approvedResults.Element("Show_WikiPageBySlug");
+			var campaignId = (string) _testVariables.Element("CampaignId");
+			var wikiPageSlug = (string) _testVariables.Element("WikiPageSlug");
+
+			var result = await API_WikiPages.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignId, wikiPageSlug);
+			Assert.AreEqual(approved, result);
+		}
 	}
 }
