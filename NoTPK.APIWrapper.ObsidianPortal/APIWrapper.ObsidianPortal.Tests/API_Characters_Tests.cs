@@ -18,7 +18,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		private static XElement _approvedResults;
 		private static XElement _testVariables;
 
-		[AssemblyInitialize]
+		[ClassInitialize]
 		public static void LoadConstants(TestContext testContext)
 		{
 			var configPath = Path.GetFullPath(@"..\..\..\..\..\..\Configs\NoTPK.APIWrapper.ObsidianPortal.Tests.Config.xml");
@@ -73,6 +73,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
+		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_Characters_Create__ByCampaignId()
 		{
 			var approved = (string)_approvedResults.Element("Show_CreateCharacter");
@@ -84,6 +85,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
+		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_Characters_Update__ByCharacterId()
 		{
 			var approved = (string) _approvedResults.Element("Show_UpdateCharacter");
@@ -96,6 +98,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
+		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_Characters_Delete__ByCharacterId()
 		{
 			var approved = (string) _approvedResults.Element("Show_DeleteCharacter");

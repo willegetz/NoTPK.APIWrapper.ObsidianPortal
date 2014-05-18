@@ -10,15 +10,15 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 {
 	public class RequestHelpers
 	{
-		internal static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		internal static string GenerateTimeStamp()
+		private static string GenerateTimeStamp()
 		{
 			TimeSpan secondsSinceUnixEpocStart = DateTime.UtcNow - Epoch;
 			return Convert.ToInt64(secondsSinceUnixEpocStart.TotalSeconds).ToString(CultureInfo.InvariantCulture);
 		}
 
-		internal static string ComputeSignature(string appSecret, string tokenSecret, string signatureData)
+		private static string ComputeSignature(string appSecret, string tokenSecret, string signatureData)
 		{
 			using (var algorithm = new HMACSHA1())
 			{
