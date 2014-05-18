@@ -45,8 +45,19 @@ namespace APIWrapper.ObsidianPortal.Tests
 		{
 			var approved = (string) _approvedResults.Element("Index_WikiPages");
 			var campaignId = (string) _testVariables.Element("CampaignId");
+			
 			var result = await API_WikiPages.IndexByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId);
+			Assert.AreEqual(approved, result);
+		}
 
+		[TestMethod]
+		public async Task Test_WikiPages_Show__ByWikiPageId()
+		{
+			var approved = (string) _approvedResults.Element("Show_WikiPageById");
+			var campaignId = (string) _testVariables.Element("CampaignId");
+			var wikiPageId = (string) _testVariables.Element("WikiPageId");
+
+			var result = await API_WikiPages.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, wikiPageId);
 			Assert.AreEqual(approved, result);
 		}
 	}
