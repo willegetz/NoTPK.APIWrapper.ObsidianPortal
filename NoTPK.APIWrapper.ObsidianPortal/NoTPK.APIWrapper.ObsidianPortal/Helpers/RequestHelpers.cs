@@ -31,7 +31,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			}
 		}
 
-		internal static async Task<string> RetrieveDataFromGet(HttpRequestMessage request)
+		internal static async Task<string> RetrieveResponseContent(HttpRequestMessage request)
 		{
 			var _httpClient = new HttpClient();
 

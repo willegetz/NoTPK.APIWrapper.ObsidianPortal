@@ -82,5 +82,17 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await API_Characters.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newCharacter);
 			Assert.AreEqual(approved, result);
 		}
+
+		[TestMethod]
+		public async Task Test_Characters_Update__ByCharacterId()
+		{
+			var approved = (string) _approvedResults.Element("Show_UpdateCharacter");
+			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
+			var updateCharacter = (string)_testVariables.Element("UpdateCharacterId");
+			var updateContent = (string) _testVariables.Element("UpdateContent");
+
+			var result = await API_Characters.Update(_appId, _appSecret, _token, _tokenSecret, campaignId, updateCharacter, updateContent);
+			Assert.AreEqual(approved, result);
+		}
 	}
 }

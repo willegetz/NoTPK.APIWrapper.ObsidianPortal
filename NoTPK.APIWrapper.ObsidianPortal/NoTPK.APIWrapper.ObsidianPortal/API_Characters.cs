@@ -14,7 +14,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			string indexUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/characters.json", campaignId);
 
 			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, indexUrl, HttpMethod.Get);
-			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
 
 		public static async Task<string> ShowById(string appId, string appSecret, string token, string tokenSecret, string campaignId, string characterId)
@@ -22,28 +22,37 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			var showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/characters/{1}.json", campaignId, characterId);
 
 			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
-			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
 
-		public static async Task<string> ShowBySlug(string appId, string appSecret, string token, string tokenSecret, string campaignId, string slug)
+		public static async Task<string> ShowBySlug(string appId, string appSecret, string token, string tokenSecret, string campaignId, string characterSlug)
 		{
-			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/characters/{1}.json", campaignId, slug);
+			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/characters/{1}.json", campaignId, characterSlug);
 			var optionalParams = new Dictionary<string, string>()
 			{
 				{"use_slug", "true"},
 			};
 
 			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get, "?use_slug=true", optionalParams);
-			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
 
-		public static async Task<string> Create(string appId, string appSecret, string token, string tokenSecret, string campaignId, string newCharacter)
+		public static async Task<string> Create(string appId, string appSecret, string token, string tokenSecret, string campaignId, string characterJson)
 		{
 			string createUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/characters.json", campaignId);
 
 			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, createUrl, HttpMethod.Post);
-			requestMessage.Content = new StringContent(newCharacter, Encoding.UTF8, "application/json");
-			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
+			requestMessage.Content = new StringContent(characterJson, Encoding.UTF8, "application/json");
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
+		}
+
+		public static async Task<string> Update(string appId, string appSecret, string token, string tokenSecret, string campaignId, string characterId, string updateContent)
+		{
+			string updateUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/characters/{1}.json", campaignId, characterId);
+
+			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, updateUrl, HttpMethod.Put);
+			requestMessage.Content = new StringContent(updateContent, Encoding.UTF8, "application/json");
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
 	}
 }

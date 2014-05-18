@@ -13,7 +13,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			string showUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}.json", campaignId);
 
 			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, showUrl, HttpMethod.Get);
-			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
 
 		public static async Task<string> ShowBySlug(string appId, string appSecret, string accessToken, string accessTokenSecret, string slug)
@@ -23,7 +23,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			var optionalParams = new Dictionary<string, string>();
 			optionalParams.Add("use_slug", "true");
 			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, accessToken, accessTokenSecret, showUrl, HttpMethod.Get,"?use_slug=true", optionalParams);
-			return await RequestHelpers.RetrieveDataFromGet(requestMessage);
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
 	}
 }
