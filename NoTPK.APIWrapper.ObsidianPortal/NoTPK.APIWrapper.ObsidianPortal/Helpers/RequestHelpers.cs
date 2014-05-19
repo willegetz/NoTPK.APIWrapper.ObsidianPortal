@@ -25,7 +25,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 				var escapedConsumerSecret = Uri.EscapeDataString(appSecret);
 				var escapedTokenSecret = String.IsNullOrEmpty(tokenSecret) ? String.Empty : Uri.EscapeDataString(tokenSecret);
 
-				algorithm.Key = Encoding.ASCII.GetBytes(String.Format(CultureInfo.InvariantCulture, "{0}&{1}", escapedConsumerSecret, escapedTokenSecret));
+				algorithm.Key = Encoding.ASCII.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", escapedConsumerSecret, escapedTokenSecret));
 				byte[] hash = algorithm.ComputeHash(Encoding.ASCII.GetBytes(signatureData));
 				return Convert.ToBase64String(hash);
 			}
