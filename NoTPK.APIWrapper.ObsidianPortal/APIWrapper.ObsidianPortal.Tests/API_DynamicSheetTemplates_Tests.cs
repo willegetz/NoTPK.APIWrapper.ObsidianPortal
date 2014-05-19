@@ -55,8 +55,18 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var approved = (string) _approvedResults.Element("Show_DST");
 			var dstId = (string) _testVariables.Element("DST_Id");
 
-			var restul = await API_DynamicSheetTemplates.Show(_appId, _appSecret, _token, _tokenSecret, dstId);
-			Assert.AreEqual(approved, restul);
+			var result = await API_DynamicSheetTemplates.ShowById(_appId, _appSecret, _token, _tokenSecret, dstId);
+			Assert.AreEqual(approved, result);
+		}
+
+		[TestMethod]
+		public async Task Test_DynamicSheetTemplates_Show__BySlug()
+		{
+			var approved = (string) _approvedResults.Element("Show_DST_BySlug");
+			var dstSlug = (string) _testVariables.Element("DST_Slug");
+
+			var result = await API_DynamicSheetTemplates.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, dstSlug);
+			Assert.AreEqual(approved, result);
 		}
 	}
 }
