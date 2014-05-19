@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="API_Campaigns_Tests.cs" />
     <Compile Include="API_Characters_Tests.cs" />
+    <Compile Include="API_DynamicSheetTemplates_Tests.cs" />
     <Compile Include="API_Users_Tests.cs" />
     <Compile Include="API_WikiPages_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

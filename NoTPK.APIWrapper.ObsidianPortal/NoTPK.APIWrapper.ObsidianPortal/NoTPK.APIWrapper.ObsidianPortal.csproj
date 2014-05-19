@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="API_Campaigns.cs" />
     <Compile Include="API_Characters.cs" />
+    <Compile Include="API_DynamicSheetTemplates.cs" />
     <Compile Include="API_Users.cs" />
     <Compile Include="API_WikiPages.cs" />
     <Compile Include="Helpers\RequestHelpers.cs" />
