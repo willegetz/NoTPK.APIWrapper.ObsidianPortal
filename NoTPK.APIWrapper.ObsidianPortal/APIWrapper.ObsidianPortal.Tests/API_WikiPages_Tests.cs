@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -83,6 +84,19 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var newWikiPage = (string) _testVariables.Element("NewWikiPage");
 
 			var result = await API_WikiPages.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newWikiPage);
+			Assert.AreEqual(approved, result);
+		}
+
+		[TestMethod]
+		[Ignore] // Destructive -- Need mocking, perhaps
+		public async Task Test_WikiPages_Update__ByWikiPageId()
+		{
+			var approved = (string) _approvedResults.Element("Update_WikiPage");
+			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
+			var updateWikiPageId = (string) _testVariables.Element("UpdateWikiPageId");
+			var updateWikiPageContent = (string) _testVariables.Element("UpdateWikiContent");
+
+			var result = await API_WikiPages.Update(_appId, _appSecret, _token, _tokenSecret, campaignId, updateWikiPageId, updateWikiPageContent);
 			Assert.AreEqual(approved, result);
 		}
 	}

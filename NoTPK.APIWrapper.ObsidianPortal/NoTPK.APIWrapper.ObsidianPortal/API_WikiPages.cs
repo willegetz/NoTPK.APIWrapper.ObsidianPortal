@@ -43,5 +43,14 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			requestMessage.Content = new StringContent(wikiPageJson, Encoding.UTF8, "application/json");
 			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
+
+		public static async Task<string> Update(string appId, string appSecret, string token, string tokenSecret, string campaignId, string wikiPageId, string wikiPageJson)
+		{
+			var updateUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/wikis/{1}.json", campaignId, wikiPageId);
+
+			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, updateUrl, HttpMethod.Put);
+			requestMessage.Content = new StringContent(wikiPageJson, Encoding.UTF8, "application/json");
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
+		}
 	}
 }
