@@ -99,5 +99,17 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await API_WikiPages.Update(_appId, _appSecret, _token, _tokenSecret, campaignId, updateWikiPageId, updateWikiPageContent);
 			Assert.AreEqual(approved, result);
 		}
+
+		[TestMethod]
+		[Ignore] // Destructive -- Need mocking, perhaps
+		public async Task Test_WikiPages_Delete__ByWikiPageId()
+		{
+			var approved = (string) _approvedResults.Element("Delete_WikiPage");
+			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
+			var deleteWikipageId = (string) _testVariables.Element("DeleteWikiPageId");
+
+			var result = await API_WikiPages.Delete(_appId, _appSecret, _token, _tokenSecret, campaignId, deleteWikipageId);
+			Assert.AreEqual(approved, result);
+		}
 	}
 }

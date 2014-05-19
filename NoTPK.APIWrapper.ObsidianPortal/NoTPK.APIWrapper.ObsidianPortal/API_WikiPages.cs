@@ -52,5 +52,13 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			requestMessage.Content = new StringContent(wikiPageJson, Encoding.UTF8, "application/json");
 			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
+
+		public static async Task<string> Delete(string appId, string appSecret, string token, string tokenSecret, string campaignId, string wikiPageId)
+		{
+			var deleteUrl = String.Format(@"http://api.obsidianportal.com/v1/campaigns/{0}/wikis/{1}.json", campaignId, wikiPageId);
+
+			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, deleteUrl, HttpMethod.Delete);
+			return await RequestHelpers.RetrieveResponseContent(requestMessage);
+		}
 	}
 }
