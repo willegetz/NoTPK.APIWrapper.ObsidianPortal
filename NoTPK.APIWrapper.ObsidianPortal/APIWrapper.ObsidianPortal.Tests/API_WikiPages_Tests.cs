@@ -72,5 +72,18 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await API_WikiPages.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignId, wikiPageSlug);
 			Assert.AreEqual(approved, result);
 		}
+
+		[TestMethod]
+		[Ignore] // Destructive -- Need mocking, perhaps
+
+		public async Task Test_WikiPages_Create__ByCampaignId()
+		{
+			var approved = (string) _approvedResults.Element("Create_WikiPage");
+			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
+			var newWikiPage = (string) _testVariables.Element("NewWikiPage");
+
+			var result = await API_WikiPages.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newWikiPage);
+			Assert.AreEqual(approved, result);
+		}
 	}
 }
