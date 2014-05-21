@@ -108,5 +108,17 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await API_Characters.Delete(_appId, _appSecret, _token, _tokenSecret, campaignId, deleteCharacter);
 			Assert.AreEqual(approved, result);
 		}
+
+		[TestMethod]
+		public async Task Test_Characters_StoreLocal__ByCharacterId()
+		{
+			// Store the character locally to allow for undoing
+			var campaignId = (string)_testVariables.Element("CampaignId");
+			var characterId = (string)_testVariables.Element("CharacterId");
+
+			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
+			var storageLocation = API_Characters.StoreLocal(result);
+			Assert.IsTrue(File.Exists(storageLocation));
+		}
 	}
 }

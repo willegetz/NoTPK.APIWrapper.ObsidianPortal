@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,6 +62,22 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 
 			var requestMessage = RequestHelpers.BuildRequest(appId, appSecret, token, tokenSecret, deleteUrl, HttpMethod.Delete);
 			return await RequestHelpers.RetrieveResponseContent(requestMessage);
+		}
+
+		public static string StoreLocal(string characterJson)
+		{
+			var specialFolder = Path.GetFullPath(Environment.SpecialFolder.ApplicationData.ToString());
+			var opCharacterFolder = Path.Combine(specialFolder, "ObsidianPortal", "Characters");
+
+			if (!Directory.Exists(opCharacterFolder))
+			{
+				Directory.CreateDirectory(opCharacterFolder);
+			}
+
+			var filePath = Path.Combine(opCharacterFolder, "Test.txt");
+
+			File.WriteAllText(filePath, characterJson);
+			return filePath;
 		}
 	}
 }
