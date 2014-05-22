@@ -64,7 +64,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			return await RequestHelpers.RetrieveResponseContent(requestMessage);
 		}
 
-		public static string StoreLocal(string characterJson)
+		public static string StoreLocal(string characterId, string characterJson)
 		{
 			var specialFolder = Path.GetFullPath(Environment.SpecialFolder.ApplicationData.ToString());
 			var opCharacterFolder = Path.Combine(specialFolder, "ObsidianPortal", "Characters");
@@ -74,7 +74,10 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 				Directory.CreateDirectory(opCharacterFolder);
 			}
 
-			var filePath = Path.Combine(opCharacterFolder, "Test.txt");
+			var characterFileName = string.Format("{0}.txt", characterId);
+			var filePath = Path.Combine(opCharacterFolder, characterFileName);
+
+
 
 			File.WriteAllText(filePath, characterJson);
 			return filePath;

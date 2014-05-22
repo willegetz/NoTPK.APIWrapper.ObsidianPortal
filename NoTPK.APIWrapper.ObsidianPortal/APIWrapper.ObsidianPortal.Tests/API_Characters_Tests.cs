@@ -117,7 +117,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var characterId = (string)_testVariables.Element("CharacterId");
 
 			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
-			var storageLocation = API_Characters.StoreLocal(result);
+			var storageLocation = API_Characters.StoreLocal(characterId, result);
 			Assert.IsTrue(File.Exists(storageLocation));
 		}
 	}
