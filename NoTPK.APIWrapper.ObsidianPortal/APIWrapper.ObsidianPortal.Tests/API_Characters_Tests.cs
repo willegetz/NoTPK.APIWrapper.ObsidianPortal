@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal;
@@ -117,6 +119,10 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var characterId = (string)_testVariables.Element("CharacterId");
 
 			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
+
+			var serializer = new JavaScriptSerializer();
+			var parsedJson = serializer.Deserialize<List<Dictionary<string, object>>>(result);
+
 			var storageLocation = API_Characters.StoreLocal(characterId, result);
 			Assert.IsTrue(File.Exists(storageLocation));
 		}
