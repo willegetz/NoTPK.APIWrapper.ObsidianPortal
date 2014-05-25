@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -121,9 +122,16 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
 
 			var serializer = new JavaScriptSerializer();
-			var parsedJson = serializer.Deserialize<List<Dictionary<string, object>>>(result);
+			var parsedJson = serializer.Deserialize<Dictionary<string, object>>(result);
+			var dstData = parsedJson["dynamic_sheet"];
 
-			var storageLocation = API_Characters.StoreLocal(characterId, result);
+
+
+			string dst = serializer.Serialize(dstData);
+
+			var saveName = string.Format("{0}_dst", characterId);
+
+			var storageLocation = API_Characters.StoreLocal(saveName, dst);
 			Assert.IsTrue(File.Exists(storageLocation));
 		}
 	}
