@@ -116,23 +116,16 @@ namespace APIWrapper.ObsidianPortal.Tests
 		public async Task Test_Characters_StoreLocal__ByCharacterId()
 		{
 			// Store the character locally to allow for undoing
+			var approved = (string) _approvedResults.Element("Show_CharacterById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterId = (string)_testVariables.Element("CharacterId");
 
 			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
 
-			var serializer = new JavaScriptSerializer();
-			var parsedJson = serializer.Deserialize<Dictionary<string, object>>(result);
-			var dstData = parsedJson["dynamic_sheet"];
+			var storageLocation = API_Characters.StoreLocal(characterId, result);
 
-
-
-			string dst = serializer.Serialize(dstData);
-
-			var saveName = string.Format("{0}_dst", characterId);
-
-			var storageLocation = API_Characters.StoreLocal(saveName, dst);
-			Assert.IsTrue(File.Exists(storageLocation));
+			var recoverCharacter = API_Characters.RetrieveLocal(storageLocation);
+			Assert.AreEqual(approved, recoverCharacter);
 		}
 	}
 }

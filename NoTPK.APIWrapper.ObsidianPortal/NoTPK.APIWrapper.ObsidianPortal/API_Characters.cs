@@ -82,5 +82,15 @@ namespace NoTPK.APIWrapper.ObsidianPortal
 			File.WriteAllText(filePath, characterJson);
 			return filePath;
 		}
+
+		public static string RetrieveLocal(string storageLocation)
+		{
+			if (File.Exists(storageLocation))
+			{
+				return File.ReadAllText(storageLocation);
+			}
+			
+			return string.Empty;
+		}
 	}
 }
