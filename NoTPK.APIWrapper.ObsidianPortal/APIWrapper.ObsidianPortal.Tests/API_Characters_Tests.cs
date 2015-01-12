@@ -7,6 +7,7 @@ using System.Web.Script.Serialization;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal;
+using APIWrapper.ObsidianPortal.Tests.Support;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
@@ -18,7 +19,6 @@ namespace APIWrapper.ObsidianPortal.Tests
 		private static string _token = "";
 		private static string _tokenSecret = "";
 
-		private static XElement _approvedResults;
 		private static XElement _testVariables;
 
 		[ClassInitialize]
@@ -36,17 +36,13 @@ namespace APIWrapper.ObsidianPortal.Tests
 				_tokenSecret = (string)tokens.Element("AccessTokenSecret");
 			}
 
-			var approvedPath = Path.GetFullPath(@"..\..\..\..\..\..\Configs\NoTPK.APIWrapper.ObsidianPortal.Tests.Approved.xml");
-			var approvedDOc = XDocument.Load(approvedPath);
-
-			_approvedResults = (from a in approvedDOc.Descendants("ApprovedValues").Descendants("Characters") select a).FirstOrDefault();
 			_testVariables = (from v in configDoc.Descendants("TestVariables") select v).FirstOrDefault();
 		}
 
 		[TestMethod]
 		public async Task Test_Characters_Index__ByCampaignId()
 		{
-			var approved = (string)_approvedResults.Element("Index_Character");
+			var approved = Helpers.GetApprovedResults("Index_Character");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 
 			var result = await API_Characters.IndexByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId);
@@ -56,7 +52,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_Characters_Show__ByCharacterId()
 		{
-			var approved = (string)_approvedResults.Element("Show_CharacterById");
+			var approved = Helpers.GetApprovedResults("Show_CharacterById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterId = (string)_testVariables.Element("CharacterId");
 
@@ -67,7 +63,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_Characters_Show__ByCharacterSlug()
 		{
-			var approved = (string)_approvedResults.Element("Show_CharacterBySlug");
+			var approved = Helpers.GetApprovedResults("Show_CharacterBySlug");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterSlug = (string)_testVariables.Element("CharacterSlug");
 
@@ -79,7 +75,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_Characters_Create__ByCampaignId()
 		{
-			var approved = (string)_approvedResults.Element("Show_CreateCharacter");
+			var approved = Helpers.GetApprovedResults("Show_CreateCharacter");
 			var campaignId = (string)_testVariables.Element("ModifiableCampaign");
 			var newCharacter = (string)_testVariables.Element("NewCharacter");
 
@@ -91,7 +87,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_Characters_Update__ByCharacterId()
 		{
-			var approved = (string) _approvedResults.Element("Show_UpdateCharacter");
+			var approved = Helpers.GetApprovedResults("Show_UpdateCharacter");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var updateCharacter = (string)_testVariables.Element("UpdateCharacterId");
 			var updateContent = (string) _testVariables.Element("UpdateContent");
@@ -104,7 +100,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_Characters_Delete__ByCharacterId()
 		{
-			var approved = (string) _approvedResults.Element("Show_DeleteCharacter");
+			var approved = Helpers.GetApprovedResults("Show_DeleteCharacter");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var deleteCharacter = (string) _testVariables.Element("DeleteCharacterId");
 
@@ -116,7 +112,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		public async Task Test_Characters_StoreLocal__ByCharacterId()
 		{
 			// Store the character locally to allow for undoing
-			var approved = (string) _approvedResults.Element("Show_CharacterById");
+			var approved = Helpers.GetApprovedResults("Show_CharacterById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterId = (string)_testVariables.Element("CharacterId");
 
