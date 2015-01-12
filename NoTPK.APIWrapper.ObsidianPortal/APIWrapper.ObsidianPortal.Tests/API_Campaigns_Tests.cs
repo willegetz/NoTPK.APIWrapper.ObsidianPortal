@@ -15,7 +15,6 @@ namespace APIWrapper.ObsidianPortal.Tests
 		private static string _token = "";
 		private static string _tokenSecret = "";
 
-		private static XElement _approvedResults;
 		private static XElement _testVariables;
 
 		[ClassInitialize]
@@ -33,31 +32,43 @@ namespace APIWrapper.ObsidianPortal.Tests
 				_tokenSecret = (string)tokens.Element("AccessTokenSecret");
 			}
 
-			var approvedPath = Path.GetFullPath(@"..\..\..\..\..\..\Configs\NoTPK.APIWrapper.ObsidianPortal.Tests.Approved.xml");
-			var approvedDOc = XDocument.Load(approvedPath);
-
-			_approvedResults = (from a in approvedDOc.Descendants("ApprovedValues").Descendants("Campaigns") select a).FirstOrDefault();
 			_testVariables = (from v in configDoc.Descendants("TestVariables") select v).FirstOrDefault();
 		}
 
 		[TestMethod]
 		public async Task Test_Campaigns_Show__ById()
 		{
-			var approved = (string)_approvedResults.Element("Show_CampaignById");
+            var approved = GetApprovedResults("Show_CampaignById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 
 			var result = await API_Campaigns.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId);
-			Assert.AreEqual(approved, result);
+            Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
 		public async Task Test_Campaigns_Show__BySlug()
 		{
-			var approved = (string)_approvedResults.Element("Show_CampaignBySlug");
+            var approved = GetApprovedResults("Show_CampaignBySlug");
 			var campaignSlug = (string)_testVariables.Element("CampaignSlug");
 
 			var result = await API_Campaigns.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignSlug);
 			Assert.AreEqual(approved, result);
 		}
+
+        private string GetApprovedResults(string approvedKey)
+        {
+            var fileName = string.Format("{0}.txt", approvedKey);
+            var approvedPath = Path.GetFullPath(string.Format(@"..\..\..\..\..\..\ApprovedFiles\{0}", fileName));
+            var sb = "";
+            using (StreamReader sr = new StreamReader(approvedPath))
+            {
+                var line = "";
+                while ((line = sr.ReadLine()) != null)
+                {
+                    sb += line;
+                }
+            }
+            return sb;
+        }
 	}
 }
