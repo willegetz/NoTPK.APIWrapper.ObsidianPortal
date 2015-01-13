@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal;
+using APIWrapper.ObsidianPortal.Tests.Support;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
@@ -15,7 +16,6 @@ namespace APIWrapper.ObsidianPortal.Tests
 		private static string _token = "";
 		private static string _tokenSecret = "";
 
-		private static XElement _approvedResults;
 		private static XElement _testVariables;
 
 		[ClassInitialize]
@@ -33,10 +33,6 @@ namespace APIWrapper.ObsidianPortal.Tests
 				_tokenSecret = (string)tokens.Element("AccessTokenSecret");
 			}
 
-			var approvedPath = Path.GetFullPath(@"..\..\..\..\..\..\Configs\NoTPK.APIWrapper.ObsidianPortal.Tests.Approved.xml");
-			var approvedDOc = XDocument.Load(approvedPath);
-			
-			_approvedResults = (from a in approvedDOc.Descendants("ApprovedValues").Descendants("Users") select a).FirstOrDefault();
 			_testVariables = (from v in configDoc.Descendants("TestVariables") select v).FirstOrDefault();
 		}
 
@@ -44,7 +40,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[Ignore] // Timestamp is created for "updated_at" value whenever a get request is made.
 		public async Task Test_Users_Show__LoggedInUser()
 		{
-			var approved = (string) _approvedResults.Element("Show_LoggedInUser");
+			var approved = Helpers.GetApprovedResults("Show_LoggedInUser");
 			var result = await API_Users.ShowMe(_appId, _appSecret, _token, _tokenSecret);
 			Assert.AreEqual(approved, result);
 		}
@@ -52,7 +48,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_Users_Show__ById()
 		{
-			var approved = (string) _approvedResults.Element("Show_UserById");
+			var approved = Helpers.GetApprovedResults("Show_UserById");
 			var userId = (string) _testVariables.Element("UserId");
 
 			var result = await API_Users.ShowById(_appId, _appSecret, _token, _tokenSecret, userId);
@@ -62,7 +58,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_Users_Show__ByName()
 		{
-			var approved = (string) _approvedResults.Element("Show_UserName");
+			var approved = Helpers.GetApprovedResults("Show_UserName");
 			var userName = (string) _testVariables.Element("UserName");
 
 			var result = await API_Users.ShowByName(_appId, _appSecret, _token, _tokenSecret, userName);

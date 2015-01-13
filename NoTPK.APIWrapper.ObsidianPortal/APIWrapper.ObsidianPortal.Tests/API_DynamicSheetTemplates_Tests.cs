@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal;
+using APIWrapper.ObsidianPortal.Tests.Support;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
@@ -15,7 +16,6 @@ namespace APIWrapper.ObsidianPortal.Tests
 		private static string _token = "";
 		private static string _tokenSecret = "";
 
-		private static XElement _approvedResults;
 		private static XElement _testVariables;
 
 		[ClassInitialize]
@@ -33,17 +33,13 @@ namespace APIWrapper.ObsidianPortal.Tests
 				_tokenSecret = (string)tokens.Element("AccessTokenSecret");
 			}
 
-			var approvedPath = Path.GetFullPath(@"..\..\..\..\..\..\Configs\NoTPK.APIWrapper.ObsidianPortal.Tests.Approved.xml");
-			var approvedDOc = XDocument.Load(approvedPath);
-
-			_approvedResults = (from a in approvedDOc.Descendants("ApprovedValues").Descendants("DSTs") select a).FirstOrDefault();
 			_testVariables = (from v in configDoc.Descendants("TestVariables") select v).FirstOrDefault();
 		}
 
 		[TestMethod]
 		public async Task Test_DynamicSheetTemplates_Index()
 		{
-			var approved = (string) _approvedResults.Element("Index_DSTs");
+			var approved = Helpers.GetApprovedResults("Index_DSTs");
 
 			var result = await API_DynamicSheetTemplates.Index(_appId, _appSecret, _token, _tokenSecret);
 			Assert.AreEqual(approved, result);
@@ -52,7 +48,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_DynamicSheetTemplates_Show__ById()
 		{
-			var approved = (string) _approvedResults.Element("Show_DST");
+			var approved = Helpers.GetApprovedResults("Show_DST");
 			var dstId = (string) _testVariables.Element("DST_Id");
 
 			var result = await API_DynamicSheetTemplates.ShowById(_appId, _appSecret, _token, _tokenSecret, dstId);
@@ -62,7 +58,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_DynamicSheetTemplates_Show__BySlug()
 		{
-			var approved = (string) _approvedResults.Element("Show_DST_BySlug");
+			var approved = Helpers.GetApprovedResults("Show_DST_BySlug");
 			var dstSlug = (string) _testVariables.Element("DST_Slug");
 
 			var result = await API_DynamicSheetTemplates.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, dstSlug);
