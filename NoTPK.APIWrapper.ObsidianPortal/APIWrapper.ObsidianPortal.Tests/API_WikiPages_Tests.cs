@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal;
+using APIWrapper.ObsidianPortal.Tests.Support;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
@@ -15,7 +16,6 @@ namespace APIWrapper.ObsidianPortal.Tests
 		private static string _token = "";
 		private static string _tokenSecret = "";
 
-		private static XElement _approvedResults;
 		private static XElement _testVariables;
 
 		[ClassInitialize]
@@ -33,17 +33,13 @@ namespace APIWrapper.ObsidianPortal.Tests
 				_tokenSecret = (string)tokens.Element("AccessTokenSecret");
 			}
 
-			var approvedPath = Path.GetFullPath(@"..\..\..\..\..\..\Configs\NoTPK.APIWrapper.ObsidianPortal.Tests.Approved.xml");
-			var approvedDOc = XDocument.Load(approvedPath);
-
-			_approvedResults = (from a in approvedDOc.Descendants("ApprovedValues").Descendants("WikiPages") select a).FirstOrDefault();
 			_testVariables = (from v in configDoc.Descendants("TestVariables") select v).FirstOrDefault();
 		}
 
 		[TestMethod]
 		public async Task Test_WikiPages_Index__ByCampaignId()
 		{
-			var approved = (string) _approvedResults.Element("Index_WikiPages");
+			var approved = Helpers.GetApprovedResults("Index_WikiPages");
 			var campaignId = (string) _testVariables.Element("CampaignId");
 			
 			var result = await API_WikiPages.IndexByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId);
@@ -53,7 +49,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public async Task Test_WikiPages_Show__ByWikiPageId()
 		{
-			var approved = (string) _approvedResults.Element("Show_WikiPageById");
+			var approved = Helpers.GetApprovedResults("Show_WikiPageById");
 			var campaignId = (string) _testVariables.Element("CampaignId");
 			var wikiPageId = (string) _testVariables.Element("WikiPageId");
 
@@ -62,10 +58,10 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
-		[Ignore] // Recieving a 504 Gate-way timeout.
+        /// There are two types of wiki pages: Post and WikiPage. ShowBySlug sometimes works with WikiPages, and not Posts; even then, it may not work.
 		public async Task Test_WikiPages_Show__BySlug()
 		{
-			var approved = (string) _approvedResults.Element("Show_WikiPageBySlug");
+			var approved = Helpers.GetApprovedResults("Show_WikiPageBySlug");
 			var campaignId = (string) _testVariables.Element("CampaignId");
 			var wikiPageSlug = (string) _testVariables.Element("WikiPageSlug");
 
@@ -78,7 +74,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 
 		public async Task Test_WikiPages_Create__ByCampaignId()
 		{
-			var approved = (string) _approvedResults.Element("Create_WikiPage");
+			var approved = Helpers.GetApprovedResults("Create_WikiPage");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var newWikiPage = (string) _testVariables.Element("NewWikiPage");
 
@@ -90,7 +86,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_WikiPages_Update__ByWikiPageId()
 		{
-			var approved = (string) _approvedResults.Element("Update_WikiPage");
+            var approved = Helpers.GetApprovedResults("Update_WikiPage");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var updateWikiPageId = (string) _testVariables.Element("UpdateWikiPageId");
 			var updateWikiPageContent = (string) _testVariables.Element("UpdateWikiContent");
@@ -103,7 +99,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_WikiPages_Delete__ByWikiPageId()
 		{
-			var approved = (string) _approvedResults.Element("Delete_WikiPage");
+            var approved = Helpers.GetApprovedResults("Delete_WikiPage");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var deleteWikipageId = (string) _testVariables.Element("DeleteWikiPageId");
 
