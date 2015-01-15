@@ -5,10 +5,13 @@ using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal;
 using APIWrapper.ObsidianPortal.Tests.Support;
+using ApprovalTests.Reporters;
+using ApprovalTests;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
 	[TestClass]
+	[UseReporter(typeof(DiffReporter))]
 	public class API_DynamicSheetTemplates_Tests
 	{
 		private static string _appId = "";
@@ -37,32 +40,28 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
-		public async Task Test_DynamicSheetTemplates_Index()
+		public void Test_DynamicSheetTemplates_Index()
 		{
-			var approved = Helpers.GetApprovedResults("Index_DSTs");
-
-			var result = await API_DynamicSheetTemplates.Index(_appId, _appSecret, _token, _tokenSecret);
-			Assert.AreEqual(approved, result);
+			var result = API_DynamicSheetTemplates.Index(_appId, _appSecret, _token, _tokenSecret).Result;
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
-		public async Task Test_DynamicSheetTemplates_Show__ById()
+		public void Test_DynamicSheetTemplates_Show__ById()
 		{
-			var approved = Helpers.GetApprovedResults("Show_DST");
 			var dstId = (string) _testVariables.Element("DST_Id");
 
-			var result = await API_DynamicSheetTemplates.ShowById(_appId, _appSecret, _token, _tokenSecret, dstId);
-			Assert.AreEqual(approved, result);
+			var result = API_DynamicSheetTemplates.ShowById(_appId, _appSecret, _token, _tokenSecret, dstId).Result;
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
-		public async Task Test_DynamicSheetTemplates_Show__BySlug()
+		public void Test_DynamicSheetTemplates_Show__BySlug()
 		{
-			var approved = Helpers.GetApprovedResults("Show_DST_BySlug");
 			var dstSlug = (string) _testVariables.Element("DST_Slug");
 
-			var result = await API_DynamicSheetTemplates.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, dstSlug);
-			Assert.AreEqual(approved, result);
+			var result = API_DynamicSheetTemplates.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, dstSlug).Result;
+			Approvals.Verify(result);
 		}
 	}
 }
