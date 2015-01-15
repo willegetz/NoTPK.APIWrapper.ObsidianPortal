@@ -58,7 +58,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
-        /// There are two types of wiki pages: Post and WikiPage. ShowBySlug sometimes works with WikiPages, and not Posts; even then, it may not work.
+		/// There are two types of wiki pages: Post and WikiPage. ShowBySlug sometimes works with WikiPages, and not Posts; even then, it may not work.
 		public async Task Test_WikiPages_Show__BySlug()
 		{
 			var approved = Helpers.GetApprovedResults("Show_WikiPageBySlug");
@@ -86,7 +86,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_WikiPages_Update__ByWikiPageId()
 		{
-            var approved = Helpers.GetApprovedResults("Update_WikiPage");
+			var approved = Helpers.GetApprovedResults("Update_WikiPage");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var updateWikiPageId = (string) _testVariables.Element("UpdateWikiPageId");
 			var updateWikiPageContent = (string) _testVariables.Element("UpdateWikiContent");
@@ -99,7 +99,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public async Task Test_WikiPages_Delete__ByWikiPageId()
 		{
-            var approved = Helpers.GetApprovedResults("Delete_WikiPage");
+			var approved = Helpers.GetApprovedResults("Delete_WikiPage");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var deleteWikipageId = (string) _testVariables.Element("DeleteWikiPageId");
 
