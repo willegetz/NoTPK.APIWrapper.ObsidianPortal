@@ -47,20 +47,20 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			return responseText;
 		}
 
-        internal static async Task<JObject> RetrieveResponseContentJobj(HttpRequestMessage request)
-        {
-            var _httpClient = new HttpClient();
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
+		internal static async Task<JObject> RetrieveResponseContentJobj(HttpRequestMessage request)
+		{
+			var _httpClient = new HttpClient();
+			HttpResponseMessage response = await _httpClient.SendAsync(request);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                response.EnsureSuccessStatusCode();
-            }
+			if (!response.IsSuccessStatusCode)
+			{
+				response.EnsureSuccessStatusCode();
+			}
 
-            string responseText = await response.Content.ReadAsStringAsync();
-            var jsonObject = JObject.Parse(responseText);
-            return jsonObject;
-        }
+			string responseText = await response.Content.ReadAsStringAsync();
+			var jsonObject = JObject.Parse(responseText);
+			return jsonObject;
+		}
 
 		internal static HttpRequestMessage BuildRequest(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
 		{

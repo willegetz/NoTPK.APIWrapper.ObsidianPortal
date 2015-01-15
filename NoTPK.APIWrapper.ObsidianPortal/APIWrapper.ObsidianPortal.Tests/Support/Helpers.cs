@@ -15,36 +15,36 @@ namespace APIWrapper.ObsidianPortal.Tests.Support
 			return serializer.Deserialize<Dictionary<string, object>>(jsonText);
 		}
 
-        public static string GetApprovedResults(string approvedKey)
-        {
-            var fileName = string.Format("{0}.txt", approvedKey);
-            var approvedPath = Path.GetFullPath(string.Format(@"..\..\..\..\..\..\ApprovedFiles\{0}", fileName));
-            var sb = "";
-            using (var sr = new StreamReader(approvedPath, Encoding.Default, true))
-            {
-                var line = "";
-                while ((line = sr.ReadLine()) != null)
-                {
-                    sb += line;
-                }
-            }
-            return sb;
-        }
+		public static string GetApprovedResults(string approvedKey)
+		{
+			var fileName = string.Format("{0}.txt", approvedKey);
+			var approvedPath = Path.GetFullPath(string.Format(@"..\..\..\..\..\..\ApprovedFiles\{0}", fileName));
+			var sb = "";
+			using (var sr = new StreamReader(approvedPath, Encoding.Default, true))
+			{
+				var line = "";
+				while ((line = sr.ReadLine()) != null)
+				{
+					sb += line;
+				}
+			}
+			return sb;
+		}
 
-        public static JObject GetApprovedResultsJobj(string approvedKey)
-        {
-            var fileName = string.Format("{0}.txt", approvedKey);
-            var approvedPath = Path.GetFullPath(string.Format(@"..\..\..\..\..\..\ApprovedFiles\{0}", fileName));
-            var sb = "";
-            using (var sr = new StreamReader(approvedPath, Encoding.Default, true))
-            {
-                var line = "";
-                while ((line = sr.ReadLine()) != null)
-                {
-                    sb += line;
-                }
-            }
-            return JObject.Parse(sb);
-        }
+		public static JObject GetApprovedResultsJobj(string approvedKey)
+		{
+			var fileName = string.Format("{0}.txt", approvedKey);
+			var approvedPath = Path.GetFullPath(string.Format(@"..\..\..\..\..\..\ApprovedFiles\{0}", fileName));
+			var sb = "";
+			using (var sr = new StreamReader(approvedPath, Encoding.Default, true))
+			{
+				var line = "";
+				while ((line = sr.ReadLine()) != null)
+				{
+					sb += line;
+				}
+			}
+			return JObject.Parse(sb);
+		}
 	}
 }
