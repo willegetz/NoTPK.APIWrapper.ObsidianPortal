@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
@@ -44,6 +46,21 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			string responseText = await response.Content.ReadAsStringAsync();
 			return responseText;
 		}
+
+        internal static async Task<JObject> RetrieveResponseContentJobj(HttpRequestMessage request)
+        {
+            var _httpClient = new HttpClient();
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                response.EnsureSuccessStatusCode();
+            }
+
+            string responseText = await response.Content.ReadAsStringAsync();
+            var jsonObject = JObject.Parse(responseText);
+            return jsonObject;
+        }
 
 		internal static HttpRequestMessage BuildRequest(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
 		{

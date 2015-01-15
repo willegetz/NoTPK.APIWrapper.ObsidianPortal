@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web.Script.Serialization;
@@ -27,6 +29,22 @@ namespace APIWrapper.ObsidianPortal.Tests.Support
                 }
             }
             return sb;
+        }
+
+        public static JObject GetApprovedResultsJobj(string approvedKey)
+        {
+            var fileName = string.Format("{0}.txt", approvedKey);
+            var approvedPath = Path.GetFullPath(string.Format(@"..\..\..\..\..\..\ApprovedFiles\{0}", fileName));
+            var sb = "";
+            using (var sr = new StreamReader(approvedPath, Encoding.Default, true))
+            {
+                var line = "";
+                while ((line = sr.ReadLine()) != null)
+                {
+                    sb += line;
+                }
+            }
+            return JObject.Parse(sb);
         }
 	}
 }
