@@ -40,83 +40,83 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
-		public async Task Test_Characters_Index__ByCampaignId()
+		public void Test_Characters_Index__ByCampaignId()
 		{
 			var approved = Helpers.GetApprovedResults("Index_Character");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 
-			var result = await API_Characters.IndexByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId);
+			var result = API_Characters.IndexByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId).Result;
 			Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
-		public async Task Test_Characters_Show__ByCharacterId()
+		public void Test_Characters_Show__ByCharacterId()
 		{
 			var approved = Helpers.GetApprovedResults("Show_CharacterById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterId = (string)_testVariables.Element("CharacterId");
 
-			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
+			var result = API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId).Result;
 			Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
-		public async Task Test_Characters_Show__ByCharacterSlug()
+		public void Test_Characters_Show__ByCharacterSlug()
 		{
 			var approved = Helpers.GetApprovedResults("Show_CharacterBySlug");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterSlug = (string)_testVariables.Element("CharacterSlug");
 
-			var result = await API_Characters.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignId, characterSlug);
+			var result = API_Characters.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignId, characterSlug).Result;
 			Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
 		[Ignore] // Destructive -- Need mocking, perhaps
-		public async Task Test_Characters_Create__ByCampaignId()
+		public void Test_Characters_Create__ByCampaignId()
 		{
 			var approved = Helpers.GetApprovedResults("Show_CreateCharacter");
 			var campaignId = (string)_testVariables.Element("ModifiableCampaign");
 			var newCharacter = (string)_testVariables.Element("NewCharacter");
 
-			var result = await API_Characters.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newCharacter);
+			var result = API_Characters.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newCharacter).Result;
 			Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
 		[Ignore] // Destructive -- Need mocking, perhaps
-		public async Task Test_Characters_Update__ByCharacterId()
+		public void Test_Characters_Update__ByCharacterId()
 		{
 			var approved = Helpers.GetApprovedResults("Show_UpdateCharacter");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var updateCharacter = (string)_testVariables.Element("UpdateCharacterId");
 			var updateContent = (string) _testVariables.Element("UpdateContent");
 
-			var result = await API_Characters.Update(_appId, _appSecret, _token, _tokenSecret, campaignId, updateCharacter, updateContent);
+			var result = API_Characters.Update(_appId, _appSecret, _token, _tokenSecret, campaignId, updateCharacter, updateContent).Result;
 			Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
 		[Ignore] // Destructive -- Need mocking, perhaps
-		public async Task Test_Characters_Delete__ByCharacterId()
+		public void Test_Characters_Delete__ByCharacterId()
 		{
 			var approved = Helpers.GetApprovedResults("Show_DeleteCharacter");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var deleteCharacter = (string) _testVariables.Element("DeleteCharacterId");
 
-			var result = await API_Characters.Delete(_appId, _appSecret, _token, _tokenSecret, campaignId, deleteCharacter);
+			var result = API_Characters.Delete(_appId, _appSecret, _token, _tokenSecret, campaignId, deleteCharacter).Result;
 			Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
-		public async Task Test_Characters_StoreLocal__ByCharacterId()
+		public void Test_Characters_StoreLocal__ByCharacterId()
 		{
 			// Store the character locally to allow for undoing
 			var approved = Helpers.GetApprovedResults("Show_CharacterById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterId = (string)_testVariables.Element("CharacterId");
 
-			var result = await API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId);
+			var result = API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId).Result;
 
 			var storageLocation = API_Characters.StoreLocal(characterId, result);
 
