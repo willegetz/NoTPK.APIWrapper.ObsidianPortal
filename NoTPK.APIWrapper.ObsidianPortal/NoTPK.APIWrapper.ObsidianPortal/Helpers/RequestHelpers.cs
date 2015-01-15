@@ -33,20 +33,6 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			}
 		}
 
-		internal static async Task<string> RetrieveResponseContent(HttpRequestMessage request)
-		{
-			var _httpClient = new HttpClient();
-			HttpResponseMessage response = await _httpClient.SendAsync(request);
-
-			if (!response.IsSuccessStatusCode)
-			{
-				response.EnsureSuccessStatusCode();
-			}
-
-			string responseText = await response.Content.ReadAsStringAsync();
-			return responseText;
-		}
-
 		internal static async Task<JObject> RetrieveResponseContentJobj(HttpRequestMessage request)
 		{
 			var _httpClient = new HttpClient();
