@@ -5,10 +5,13 @@ using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal;
 using APIWrapper.ObsidianPortal.Tests.Support;
+using ApprovalTests.Reporters;
+using ApprovalTests;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
 	[TestClass]
+	[UseReporter(typeof(DiffReporter))]
 	public class API_Campaigns_Tests
 	{
 		private static string _appId = "";
@@ -39,21 +42,19 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public void Test_Campaigns_Show__ById()
 		{
-			var approved = Helpers.GetApprovedResults("Show_CampaignById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 
 			var result = API_Campaigns.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId).Result;
-			Assert.AreEqual(approved, result);
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
 		public void Test_Campaigns_Show__BySlug()
 		{
-			var approved = Helpers.GetApprovedResults("Show_CampaignBySlug");
 			var campaignSlug = (string)_testVariables.Element("CampaignSlug");
 
 			var result = API_Campaigns.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignSlug).Result;
-			Assert.AreEqual(approved, result);
+			Approvals.Verify(result);
 		}
 	}
 }
