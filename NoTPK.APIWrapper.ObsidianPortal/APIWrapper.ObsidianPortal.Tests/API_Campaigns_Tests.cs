@@ -37,22 +37,22 @@ namespace APIWrapper.ObsidianPortal.Tests
 		}
 
 		[TestMethod]
-		public async Task Test_Campaigns_Show__ById()
+		public void Test_Campaigns_Show__ById()
 		{
 			var approved = Helpers.GetApprovedResults("Show_CampaignById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 
-			var result = await API_Campaigns.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId);
+			var result = API_Campaigns.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId).Result;
 			Assert.AreEqual(approved, result);
 		}
 
 		[TestMethod]
-		public async Task Test_Campaigns_Show__BySlug()
+		public void Test_Campaigns_Show__BySlug()
 		{
 			var approved = Helpers.GetApprovedResults("Show_CampaignBySlug");
 			var campaignSlug = (string)_testVariables.Element("CampaignSlug");
 
-			var result = await API_Campaigns.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignSlug);
+			var result = API_Campaigns.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignSlug).Result;
 			Assert.AreEqual(approved, result);
 		}
 	}
