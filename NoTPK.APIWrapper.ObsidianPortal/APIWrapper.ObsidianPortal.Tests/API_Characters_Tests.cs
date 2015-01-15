@@ -109,7 +109,6 @@ namespace APIWrapper.ObsidianPortal.Tests
 		public void Test_Characters_StoreLocal__ByCharacterId()
 		{
 			// Store the character locally to allow for undoing
-			var approved = Helpers.GetApprovedResults("Show_CharacterById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterId = (string)_testVariables.Element("CharacterId");
 
