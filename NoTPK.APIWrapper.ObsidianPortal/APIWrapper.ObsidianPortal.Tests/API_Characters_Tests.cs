@@ -8,10 +8,13 @@ using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal;
 using APIWrapper.ObsidianPortal.Tests.Support;
+using ApprovalTests.Reporters;
+using ApprovalTests;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
 	[TestClass]
+	[UseReporter(typeof(DiffReporter))]
 	public class API_Characters_Tests
 	{
 		private static string _appId = "";
@@ -42,70 +45,64 @@ namespace APIWrapper.ObsidianPortal.Tests
 		[TestMethod]
 		public void Test_Characters_Index__ByCampaignId()
 		{
-			var approved = Helpers.GetApprovedResults("Index_Character");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 
 			var result = API_Characters.IndexByCampaignId(_appId, _appSecret, _token, _tokenSecret, campaignId).Result;
-			Assert.AreEqual(approved, result);
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
 		public void Test_Characters_Show__ByCharacterId()
 		{
-			var approved = Helpers.GetApprovedResults("Show_CharacterById");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterId = (string)_testVariables.Element("CharacterId");
 
 			var result = API_Characters.ShowById(_appId, _appSecret, _token, _tokenSecret, campaignId, characterId).Result;
-			Assert.AreEqual(approved, result);
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
 		public void Test_Characters_Show__ByCharacterSlug()
 		{
-			var approved = Helpers.GetApprovedResults("Show_CharacterBySlug");
 			var campaignId = (string)_testVariables.Element("CampaignId");
 			var characterSlug = (string)_testVariables.Element("CharacterSlug");
 
 			var result = API_Characters.ShowBySlug(_appId, _appSecret, _token, _tokenSecret, campaignId, characterSlug).Result;
-			Assert.AreEqual(approved, result);
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public void Test_Characters_Create__ByCampaignId()
 		{
-			var approved = Helpers.GetApprovedResults("Show_CreateCharacter");
 			var campaignId = (string)_testVariables.Element("ModifiableCampaign");
 			var newCharacter = (string)_testVariables.Element("NewCharacter");
 
 			var result = API_Characters.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newCharacter).Result;
-			Assert.AreEqual(approved, result);
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public void Test_Characters_Update__ByCharacterId()
 		{
-			var approved = Helpers.GetApprovedResults("Show_UpdateCharacter");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var updateCharacter = (string)_testVariables.Element("UpdateCharacterId");
 			var updateContent = (string) _testVariables.Element("UpdateContent");
 
 			var result = API_Characters.Update(_appId, _appSecret, _token, _tokenSecret, campaignId, updateCharacter, updateContent).Result;
-			Assert.AreEqual(approved, result);
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
 		[Ignore] // Destructive -- Need mocking, perhaps
 		public void Test_Characters_Delete__ByCharacterId()
 		{
-			var approved = Helpers.GetApprovedResults("Show_DeleteCharacter");
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var deleteCharacter = (string) _testVariables.Element("DeleteCharacterId");
 
 			var result = API_Characters.Delete(_appId, _appSecret, _token, _tokenSecret, campaignId, deleteCharacter).Result;
-			Assert.AreEqual(approved, result);
+			Approvals.Verify(result);
 		}
 
 		[TestMethod]
@@ -121,7 +118,7 @@ namespace APIWrapper.ObsidianPortal.Tests
 			var storageLocation = API_Characters.StoreLocal(characterId, result);
 
 			var recoverCharacter = API_Characters.RetrieveLocal(storageLocation);
-			Assert.AreEqual(approved, recoverCharacter);
+			Approvals.Verify(recoverCharacter);
 		}
 	}
 }

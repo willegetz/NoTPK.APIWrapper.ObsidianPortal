@@ -62,6 +62,21 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			return jsonObject;
 		}
 
+		internal static async Task<JArray> RetrieveResponseContentJarray(HttpRequestMessage request)
+		{
+			var _httpClient = new HttpClient();
+			HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				response.EnsureSuccessStatusCode();
+			}
+
+			string responseText = await response.Content.ReadAsStringAsync();
+			var jsonArray = JArray.Parse(responseText);
+			return jsonArray;
+		}
+
 		internal static HttpRequestMessage BuildRequest(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
 		{
 			var authorizationHeader = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, location, webMethod, optionalParams);
