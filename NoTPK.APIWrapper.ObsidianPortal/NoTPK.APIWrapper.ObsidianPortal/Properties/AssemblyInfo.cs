@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NoTPK.APIWrapper.ObsidianPortal")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Fish & Richardson P.C.")]
+[assembly: AssemblyCompany("William Getz")]
 [assembly: AssemblyProduct("NoTPK.APIWrapper.ObsidianPortal")]
-[assembly: AssemblyCopyright("Copyright © Fish & Richardson P.C. 2014")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

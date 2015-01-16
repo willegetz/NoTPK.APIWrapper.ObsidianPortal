@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("APIWrapper.ObsidianPortal.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Fish & Richardson P.C.")]
+[assembly: AssemblyCompany("William Getz")]
 [assembly: AssemblyProduct("APIWrapper.ObsidianPortal.Tests")]
-[assembly: AssemblyCopyright("Copyright © Fish & Richardson P.C. 2014")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
