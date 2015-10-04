@@ -11,7 +11,6 @@ using ApprovalTests;
 namespace APIWrapper.ObsidianPortal.Tests
 {
 	[TestClass]
-	[UseReporter(typeof(DiffReporter))]
 	public class API_Campaigns_Tests
 	{
 		private static string _appId = "";

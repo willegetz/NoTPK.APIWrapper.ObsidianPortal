@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ApprovalTests, Version=3.0.0.0, Culture=neutral, PublicKeyToken=11bd7d124fc62e0f, processorArchitecture=MSIL">
+      <HintPath>packages\ApprovalTests.3.0.7\lib\net40\ApprovalTests.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ApprovalUtilities, Version=1.22.0.0, Culture=neutral, PublicKeyToken=11bd7d124fc62e0f, processorArchitecture=MSIL">
+      <HintPath>packages\ApprovalUtilities.1.22.1\lib\net35\ApprovalUtilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\Learning\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -53,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="_CreateNewNuGetPackage\Config.ps1" />
     <None Include="_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1" />

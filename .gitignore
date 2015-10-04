@@ -20,6 +20,10 @@ bld/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# ApprovalTests
+*.approved.*
+*.received.*
+
 #NUNIT
 *.VisualState.xml
 TestResult.xml

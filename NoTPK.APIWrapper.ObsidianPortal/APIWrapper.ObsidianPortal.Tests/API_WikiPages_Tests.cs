@@ -7,11 +7,11 @@ using NoTPK.APIWrapper.ObsidianPortal;
 using APIWrapper.ObsidianPortal.Tests.Support;
 using ApprovalTests;
 using ApprovalTests.Reporters;
+using Rhino.Mocks;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
 	[TestClass]
-	[UseReporter(typeof(DiffReporter))]
 	public class API_WikiPages_Tests
 	{
 		private static string _appId = "";
@@ -71,14 +71,16 @@ namespace APIWrapper.ObsidianPortal.Tests
 
 		[TestMethod]
 		[Ignore] // Destructive -- Need mocking, perhaps
-
 		public void Test_WikiPages_Create__ByCampaignId()
 		{
 			var campaignId = (string) _testVariables.Element("ModifiableCampaign");
 			var newWikiPage = (string) _testVariables.Element("NewWikiPage");
 
+			//var wikiPage = MockRepository.GenerateStrictMock<API_WikiPages>();
+			//var result1 = wikiPage.Expect(a => a.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newWikiPage));
+
 			var result = API_WikiPages.Create(_appId, _appSecret, _token, _tokenSecret, campaignId, newWikiPage).Result;
-			Approvals.Verify(result);
+			//Approvals.Verify(result);
 		}
 
 		[TestMethod]
