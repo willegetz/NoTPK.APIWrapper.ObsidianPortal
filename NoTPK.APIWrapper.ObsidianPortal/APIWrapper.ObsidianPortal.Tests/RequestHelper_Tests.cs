@@ -18,14 +18,15 @@ namespace APIWrapper.ObsidianPortal.Tests
         private const string AccessTokenSecret = "accessTokenSecret";
         private const string Location = "location";
         private const string Nonce = "nonce";
-        private const string OauthTimeStamp = "1444009267";
+        private const string OauthTimeStamp = "38357152200";
+
+        private MockClock _mockClock = new MockClock(DateTime.Parse("6/28/3185 5:30:00"));
 
         [TestMethod]
         public void TestGetAuthorizationHeader()
         {
             var webMethod = HttpMethod.Get;
-            var mockClock = new MockClock(DateTime.Parse("6/28/3185 5:30:00"));
-            var result = RequestHelpers.GetAuthorizationHeader(mockClock, AppId, AppSecret, AccessToken, AccessTokenSecret, Location, webMethod, Nonce);
+            var result = RequestHelpers.GetAuthorizationHeader(_mockClock, AppId, AppSecret, AccessToken, AccessTokenSecret, Location, webMethod, Nonce);
             Approvals.Verify(result);
         }
 
@@ -64,6 +65,13 @@ namespace APIWrapper.ObsidianPortal.Tests
             };
 
             var result = RequestHelpers.BuildAuthorizationParameterString(authorizationParts);
+            Approvals.Verify(result);
+        }
+
+        [TestMethod]
+        public void TestGenerateTimeStamp()
+        {
+            var result = RequestHelpers.GenerateTimeStamp(_mockClock);
             Approvals.Verify(result);
         }
     }
