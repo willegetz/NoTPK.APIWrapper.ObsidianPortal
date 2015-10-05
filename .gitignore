@@ -135,6 +135,9 @@ packages/
 # This line needs to be after the ignore of the build folder (and the packages folder if the line above has been uncommented)
 !packages/build/
 
+# Nuget Creation
+_CreateNewNuGetPackage/
+
 # Windows Azure Build Output
 csx/
 *.build.csdef
