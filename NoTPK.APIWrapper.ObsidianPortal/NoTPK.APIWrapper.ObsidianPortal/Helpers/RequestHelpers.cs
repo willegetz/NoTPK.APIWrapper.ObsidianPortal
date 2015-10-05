@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ApprovalUtilities.Utilities;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 	{
 		private static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		private static string GenerateTimeStamp()
+		private static string GenerateTimeStamp(Clock clock)
 		{
-			TimeSpan secondsSinceUnixEpocStart = DateTime.UtcNow - Epoch;
+            TimeSpan secondsSinceUnixEpocStart = clock.Load().ToUniversalTime() - Epoch;
 			return Convert.ToInt64(secondsSinceUnixEpocStart.TotalSeconds).ToString(CultureInfo.InvariantCulture);
 		}
 
@@ -66,7 +67,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 		internal static HttpRequestMessage BuildRequest(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string queryParams = "", Dictionary<string, string> optionalParams = null)
 		{
             string nonce = Guid.NewGuid().ToString("N");
-            var authorizationHeader = GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, location, webMethod, nonce, optionalParams);
+            var authorizationHeader = GetAuthorizationHeader(new Clock(), appId, appSecret, accessToken, accessTokenSecret, location, webMethod, nonce, optionalParams);
 
 			var fullUri = location + queryParams;
 			var request = new HttpRequestMessage(webMethod, fullUri);
@@ -74,18 +75,11 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			return request;
 		}
 
-		public static string GetAuthorizationHeader(string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string nonce, Dictionary<string, string> optionalParams = null)
+		public static string GetAuthorizationHeader(Clock clock, string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string nonce, Dictionary<string, string> optionalParams = null)
         {
-            var oauthTimestamp = GenerateTimeStamp();
-            SortedDictionary<string, string> authorizationParts = GetAuthorizationParts(appId, accessToken, nonce, oauthTimestamp, optionalParams);
-
-            var parameterBuilder = new StringBuilder();
-            foreach (var authorizationKey in authorizationParts)
-            {
-                parameterBuilder.AppendFormat("{0}={1}&", Uri.EscapeDataString(authorizationKey.Key), Uri.EscapeDataString(authorizationKey.Value));
-            }
-            parameterBuilder.Length--;
-            string parameterString = parameterBuilder.ToString();
+            var oauthTimestamp = GenerateTimeStamp(clock);
+            var authorizationParts = GetAuthorizationParts(appId, accessToken, nonce, oauthTimestamp, optionalParams);
+            var parameterString = BuildAuthorizationParameterString(authorizationParts);
 
             var canonicalizedRequestBuilder = new StringBuilder();
             canonicalizedRequestBuilder.Append(webMethod.Method);
@@ -118,7 +112,19 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
             return authorizationHeader;
         }
 
-        public static SortedDictionary<string, string> GetAuthorizationParts(string appId, string accessToken, string nonce, string oauthTimestamp, Dictionary<string, string> optionalParams)
+        public static string BuildAuthorizationParameterString(SortedDictionary<string, string> authorizationParts)
+        {
+            var parameterBuilder = new StringBuilder();
+            foreach (var authorizationKey in authorizationParts)
+            {
+                parameterBuilder.AppendFormat("{0}={1}&", Uri.EscapeDataString(authorizationKey.Key), Uri.EscapeDataString(authorizationKey.Value));
+            }
+            parameterBuilder.Length--;
+            string parameterString = parameterBuilder.ToString();
+            return parameterString;
+        }
+
+        public static SortedDictionary<string, string> GetAuthorizationParts(string appId, string accessToken, string nonce, string oauthTimestamp, Dictionary<string, string> optionalParams = null)
         {
             var authorizationParts = new SortedDictionary<string, string>()
             {

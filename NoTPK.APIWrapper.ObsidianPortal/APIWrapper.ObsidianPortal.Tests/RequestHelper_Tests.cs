@@ -5,34 +5,33 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NoTPK.APIWrapper.ObsidianPortal.Helpers;
 using ApprovalTests;
 using System.Net.Http;
+using ApprovalUtilities.Utilities;
 
 namespace APIWrapper.ObsidianPortal.Tests
 {
     [TestClass]
     public class RequestHelper_Tests
     {
+        private const string AppId = "appId";
+        private const string AppSecret = "appSecret";
+        private const string AccessToken = "accessToken";
+        private const string AccessTokenSecret = "accessTokenSecret";
+        private const string Location = "location";
+        private const string Nonce = "nonce";
+        private const string OauthTimeStamp = "1444009267";
+
         [TestMethod]
         public void TestGetAuthorizationHeader()
         {
-            var appId = "appId";
-            var appSecret = "appSecret";
-            var accessToken = "accessToken";
-            var accessTokenSecret = "accessTokenSecret";
-            var location = "location";
-            var nonce = "nonce";
             var webMethod = HttpMethod.Get;
-
-            var result = RequestHelpers.GetAuthorizationHeader(appId, appSecret, accessToken, accessTokenSecret, location, webMethod, nonce);
+            var mockClock = new MockClock(DateTime.Parse("6/28/3185 5:30:00"));
+            var result = RequestHelpers.GetAuthorizationHeader(mockClock, AppId, AppSecret, AccessToken, AccessTokenSecret, Location, webMethod, Nonce);
             Approvals.Verify(result);
         }
 
         [TestMethod]
         public void TestGetAuthorizationParts()
         {
-            var appId = "appId";
-            var accessToken = "accessToken";
-            var nonce = "nonce";
-            var oauthTimestamp = "1444009267";
             var optionalParams = new Dictionary<string, string>()
             {
                 {"optionalKey1", "optionalValue1" },
@@ -40,20 +39,32 @@ namespace APIWrapper.ObsidianPortal.Tests
                 {"optionalKey3", "optionalValue3" },
             };
 
-            var result = RequestHelpers.GetAuthorizationParts(appId, accessToken, nonce, oauthTimestamp, optionalParams);
+            var result = RequestHelpers.GetAuthorizationParts(AppId, AccessToken, Nonce, OauthTimeStamp, optionalParams);
             Approvals.VerifyAll(result);
         }
 
         [TestMethod]
         public void TestGetAuthorizationParts_NoOptionalParams()
         {
-            var appId = "appId";
-            var accessToken = "accessToken";
-            var nonce = "nonce";
-            var oauthTimestamp = "1444009267";
-
-            var result = RequestHelpers.GetAuthorizationParts(appId, accessToken, nonce, oauthTimestamp, null);
+            var result = RequestHelpers.GetAuthorizationParts(AppId, AccessToken, Nonce, OauthTimeStamp);
             Approvals.VerifyAll(result);
+        }
+
+        [TestMethod]
+        public void TestBuildAuthorizationParameterString()
+        {
+            var authorizationParts = new SortedDictionary<string, string>()
+            {
+                {"oauth_consumer_key", AppId},
+                {"oauth_nonce", Nonce},
+                {"oauth_signature_method", "HMAC-SHA1"},
+                {"oauth_token", AccessToken},
+                {"oauth_timestamp", OauthTimeStamp},
+                {"oauth_version", "1.0"}
+            };
+
+            var result = RequestHelpers.BuildAuthorizationParameterString(authorizationParts);
+            Approvals.Verify(result);
         }
     }
 }
