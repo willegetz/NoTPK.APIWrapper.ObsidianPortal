@@ -16,9 +16,10 @@ namespace APIWrapper.ObsidianPortal.Tests
         private const string AppSecret = "appSecret";
         private const string AccessToken = "accessToken";
         private const string AccessTokenSecret = "accessTokenSecret";
-        private const string Location = "location";
+        private const string Location = @"http://api.obsidianportal.com/v1/campaigns/123456789.json";
         private const string Nonce = "nonce";
         private const string OauthTimeStamp = "38357152200";
+        private const string ParameterString = "oauth_consumer_key=appId&oauth_nonce=nonce&oauth_signature_method=HMAC-SHA1&oauth_timestamp=38357152200&oauth_token=accessToken&oauth_version=1.0";
 
         private MockClock _mockClock = new MockClock(DateTime.Parse("6/28/3185 5:30:00"));
 
@@ -72,6 +73,14 @@ namespace APIWrapper.ObsidianPortal.Tests
         public void TestGenerateTimeStamp()
         {
             var result = RequestHelpers.GenerateTimeStamp(_mockClock);
+            Approvals.Verify(result);
+        }
+
+        [TestMethod]
+        public void TestBuildCanonicalizedRequest()
+        {
+            var webMethod = new HttpMethod("GET");
+            var result = RequestHelpers.BuildCanonicalizedRequest(Location, webMethod, ParameterString);
             Approvals.Verify(result);
         }
     }

@@ -80,15 +80,10 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
             var oauthTimestamp = GenerateTimeStamp(clock);
             var authorizationParts = GetAuthorizationParts(appId, accessToken, nonce, oauthTimestamp, optionalParams);
             var parameterString = BuildAuthorizationParameterString(authorizationParts);
+            var canonicalizedRequest = BuildCanonicalizedRequest(location, webMethod, parameterString);
 
-            var canonicalizedRequestBuilder = new StringBuilder();
-            canonicalizedRequestBuilder.Append(webMethod.Method);
-            canonicalizedRequestBuilder.Append("&");
-            canonicalizedRequestBuilder.Append(Uri.EscapeDataString(location));
-            canonicalizedRequestBuilder.Append("&");
-            canonicalizedRequestBuilder.Append(Uri.EscapeDataString(parameterString));
+            string signature = ComputeSignature(appSecret, accessTokenSecret, canonicalizedRequest.ToString());
 
-            string signature = ComputeSignature(appSecret, accessTokenSecret, canonicalizedRequestBuilder.ToString());
             authorizationParts.Add("oauth_signature", signature);
             authorizationParts.Remove("oauth_verifier");
 
@@ -110,6 +105,17 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
             authorizationHeaderBuilder.Length = authorizationHeaderBuilder.Length - 2;
             var authorizationHeader = authorizationHeaderBuilder.ToString();
             return authorizationHeader;
+        }
+
+        public static StringBuilder BuildCanonicalizedRequest(string location, HttpMethod webMethod, string parameterString)
+        {
+            var canonicalizedRequestBuilder = new StringBuilder();
+            canonicalizedRequestBuilder.Append(webMethod.Method);
+            canonicalizedRequestBuilder.Append("&");
+            canonicalizedRequestBuilder.Append(Uri.EscapeDataString(location));
+            canonicalizedRequestBuilder.Append("&");
+            canonicalizedRequestBuilder.Append(Uri.EscapeDataString(parameterString));
+            return canonicalizedRequestBuilder;
         }
 
         public static string BuildAuthorizationParameterString(SortedDictionary<string, string> authorizationParts)
