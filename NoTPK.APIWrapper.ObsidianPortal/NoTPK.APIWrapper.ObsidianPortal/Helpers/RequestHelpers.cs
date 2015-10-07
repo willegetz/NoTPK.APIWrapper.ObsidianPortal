@@ -21,7 +21,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 			return Convert.ToInt64(secondsSinceUnixEpocStart.TotalSeconds).ToString(CultureInfo.InvariantCulture);
 		}
 
-		private static string ComputeSignature(string appSecret, string tokenSecret, string signatureData)
+		public static string ComputeSignature(string appSecret, string tokenSecret, string signatureData)
 		{
 			using (var algorithm = new HMACSHA1())
 			{
@@ -77,12 +77,16 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
 
 		public static string GetAuthorizationHeader(Clock clock, string appId, string appSecret, string accessToken, string accessTokenSecret, string location, HttpMethod webMethod, string nonce, Dictionary<string, string> optionalParams = null)
         {
+            // We have the OAuth query string, and the Authorization Parts
+            // Authorization Parts are used in the generation of the signature
+            // OAuth query string does not use all the items that go into the auth parts.
+
             var oauthTimestamp = GenerateTimeStamp(clock);
             var authorizationParts = GetAuthorizationParts(appId, accessToken, nonce, oauthTimestamp, optionalParams);
             var parameterString = BuildAuthorizationParameterString(authorizationParts);
             var canonicalizedRequest = BuildCanonicalizedRequest(location, webMethod, parameterString);
 
-            string signature = ComputeSignature(appSecret, accessTokenSecret, canonicalizedRequest.ToString());
+            var signature = ComputeSignature(appSecret, accessTokenSecret, canonicalizedRequest);
 
             authorizationParts.Add("oauth_signature", signature);
             authorizationParts.Remove("oauth_verifier");
@@ -107,7 +111,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
             return authorizationHeader;
         }
 
-        public static StringBuilder BuildCanonicalizedRequest(string location, HttpMethod webMethod, string parameterString)
+        public static string BuildCanonicalizedRequest(string location, HttpMethod webMethod, string parameterString)
         {
             var canonicalizedRequestBuilder = new StringBuilder();
             canonicalizedRequestBuilder.Append(webMethod.Method);
@@ -115,7 +119,7 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
             canonicalizedRequestBuilder.Append(Uri.EscapeDataString(location));
             canonicalizedRequestBuilder.Append("&");
             canonicalizedRequestBuilder.Append(Uri.EscapeDataString(parameterString));
-            return canonicalizedRequestBuilder;
+            return canonicalizedRequestBuilder.ToString();
         }
 
         public static string BuildAuthorizationParameterString(SortedDictionary<string, string> authorizationParts)

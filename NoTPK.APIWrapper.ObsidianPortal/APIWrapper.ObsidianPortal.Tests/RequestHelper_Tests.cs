@@ -20,6 +20,7 @@ namespace APIWrapper.ObsidianPortal.Tests
         private const string Nonce = "nonce";
         private const string OauthTimeStamp = "38357152200";
         private const string ParameterString = "oauth_consumer_key=appId&oauth_nonce=nonce&oauth_signature_method=HMAC-SHA1&oauth_timestamp=38357152200&oauth_token=accessToken&oauth_version=1.0";
+        private const string SignatureData = "GET&http%3A%2F%2Fapi.obsidianportal.com%2Fv1%2Fcampaigns%2F123456789.json&oauth_consumer_key%3DappId%26oauth_nonce%3Dnonce%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D38357152200%26oauth_token%3DaccessToken%26oauth_version%3D1.0";
 
         private MockClock _mockClock = new MockClock(DateTime.Parse("6/28/3185 5:30:00"));
 
@@ -81,6 +82,13 @@ namespace APIWrapper.ObsidianPortal.Tests
         {
             var webMethod = new HttpMethod("GET");
             var result = RequestHelpers.BuildCanonicalizedRequest(Location, webMethod, ParameterString);
+            Approvals.Verify(result);
+        }
+
+        [TestMethod]
+        public void TestComputeSignature()
+        {
+            var result = RequestHelpers.ComputeSignature(AppSecret, AccessTokenSecret, SignatureData);
             Approvals.Verify(result);
         }
     }
