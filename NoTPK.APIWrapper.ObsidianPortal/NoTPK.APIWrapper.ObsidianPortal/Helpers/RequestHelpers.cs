@@ -84,20 +84,10 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
             var oauthTimestamp = GenerateTimeStamp(clock);
             var authorizationParts = GetAuthorizationParts(appId, accessToken, nonce, oauthTimestamp, optionalParams);
             var parameterString = BuildAuthorizationParameterString(authorizationParts);
+
             var canonicalizedRequest = BuildCanonicalizedRequest(location, webMethod, parameterString);
-
             var signature = ComputeSignature(appSecret, accessTokenSecret, canonicalizedRequest);
-
-            authorizationParts.Add("oauth_signature", signature);
-            authorizationParts.Remove("oauth_verifier");
-
-            if (optionalParams != null)
-            {
-                foreach (var optionalParam in optionalParams)
-                {
-                    authorizationParts.Remove(optionalParam.Key);
-                }
-            }
+            UpdateAuthorizationParts(authorizationParts, optionalParams, signature);
 
             var authorizationHeaderBuilder = new StringBuilder();
             authorizationHeaderBuilder.Append("OAuth ");
@@ -109,6 +99,21 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
             authorizationHeaderBuilder.Length = authorizationHeaderBuilder.Length - 2;
             var authorizationHeader = authorizationHeaderBuilder.ToString();
             return authorizationHeader;
+        }
+
+        public static SortedDictionary<string, string> UpdateAuthorizationParts(SortedDictionary<string, string> authorizationParts, Dictionary<string, string> optionalParams, string signature)
+        {
+            authorizationParts.Remove("oauth_verifier");
+
+            if (optionalParams != null)
+            {
+                foreach (var optionalParam in optionalParams)
+                {
+                    authorizationParts.Remove(optionalParam.Key);
+                }
+            }
+            authorizationParts.Add("oauth_signature", signature);
+            return authorizationParts;
         }
 
         public static string BuildCanonicalizedRequest(string location, HttpMethod webMethod, string parameterString)
