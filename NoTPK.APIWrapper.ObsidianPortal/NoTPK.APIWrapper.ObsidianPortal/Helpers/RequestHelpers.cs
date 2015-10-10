@@ -89,6 +89,11 @@ namespace NoTPK.APIWrapper.ObsidianPortal.Helpers
             var signature = ComputeSignature(appSecret, accessTokenSecret, canonicalizedRequest);
             UpdateAuthorizationParts(authorizationParts, optionalParams, signature);
 
+            return BuildAuthorizationHeader(authorizationParts);
+        }
+
+        public static string BuildAuthorizationHeader(SortedDictionary<string, string> authorizationParts)
+        {
             var authorizationHeaderBuilder = new StringBuilder();
             authorizationHeaderBuilder.Append("OAuth ");
             foreach (var authorizationPart in authorizationParts)

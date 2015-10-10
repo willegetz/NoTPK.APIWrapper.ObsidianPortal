@@ -117,5 +117,33 @@ namespace APIWrapper.ObsidianPortal.Tests
             var result = RequestHelpers.UpdateAuthorizationParts(authorizationParts, optionalParams, signature);
             Approvals.VerifyAll(result);
         }
+
+        [TestMethod]
+        public void TestBuildAuthorizationHeader()
+        {
+            var authorizationParts = new SortedDictionary<string, string>()
+            {
+                {"oauth_consumer_key", AppId},
+                {"oauth_nonce", Nonce},
+                {"oauth_signature_method", "HMAC-SHA1"},
+                {"oauth_token", AccessToken},
+                {"oauth_timestamp", OauthTimeStamp},
+                {"oauth_version", "1.0"}
+            };
+
+            var optionalParams = new Dictionary<string, string>()
+            {
+                {"optionalKey1", "optionalValue1" },
+                {"optionalKey2", "optionalValue2" },
+                {"optionalKey3", "optionalValue3" },
+            };
+
+            var signature = @"Lxbp/sGTkhBpCFjtlTL7P218iug=";
+
+            var updatedAuthParts = RequestHelpers.UpdateAuthorizationParts(authorizationParts, optionalParams, signature);
+
+            var result = RequestHelpers.BuildAuthorizationHeader(updatedAuthParts);
+            Approvals.Verify(result);
+        }
     }
 }
